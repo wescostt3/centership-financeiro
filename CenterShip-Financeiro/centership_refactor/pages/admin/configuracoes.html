@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Configurações | CenterShip Financeiro</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="../../css/app.css"></head><body><div class="app-shell"><aside class="sidebar">
+  <a class="brand" href="../../dashboard.html">
+    <span class="logo-mark">CS</span>
+    <div>
+      <strong>CenterShip</strong>
+      <span>Financeiro interno</span>
+    </div>
+  </a>
+  <nav class="nav-group">
+    <div class="nav-label">Principal</div>
+    <a class="nav-link" href="../../dashboard.html">
+      <i class="nav-dot"></i><span>Dashboard</span>
+    </a>
+  </nav>
+  <nav class="nav-group">
+    <div class="nav-label" data-role-admin>Cadastros</div>
+    <a class="nav-link" href="../../pages/cadastros/clientes.html">
+      <i class="nav-dot"></i><span>Clientes</span>
+    </a>
+    <a class="nav-link" href="../../pages/cadastros/fornecedores.html">
+      <i class="nav-dot"></i><span>Fornecedores</span>
+    </a>
+    <a class="nav-link" href="../../pages/cadastros/colaboradores-mei.html">
+      <i class="nav-dot"></i><span>Colaboradores MEI</span>
+    </a>
+  </nav>
+  <nav class="nav-group">
+    <div class="nav-label">Financeiro</div>
+    <a class="nav-link" href="../../pages/financeiro/lancamentos.html">
+      <i class="nav-dot"></i><span>Lançamentos</span>
+    </a>
+    <a class="nav-link" href="../../pages/financeiro/contas.html">
+      <i class="nav-dot"></i><span>Contas</span>
+    </a>
+    <a class="nav-link" href="../../pages/financeiro/pagamentos-semanais.html">
+      <i class="nav-dot"></i><span>Pagamentos MEI</span>
+    </a>
+  </nav>
+  <nav class="nav-group">
+    <div class="nav-label">Documentos</div>
+    <a class="nav-link" href="../../pages/documentos/documentos.html">
+      <i class="nav-dot"></i><span>Comprovantes</span>
+    </a>
+    <a class="nav-link" href="../../pages/documentos/recibos.html">
+      <i class="nav-dot"></i><span>Recibos</span>
+    </a>
+    <a class="nav-link" href="../../pages/documentos/relatorios.html">
+      <i class="nav-dot"></i><span>Relatórios</span>
+    </a>
+  </nav>
+  <nav class="nav-group" data-role-admin>
+    <div class="nav-label">Administração</div>
+    <a class="nav-link" href="../../pages/admin/auditoria.html">
+      <i class="nav-dot"></i><span>Auditoria</span>
+    </a>
+    <a class="nav-link" href="../../pages/admin/configuracoes.html">
+      <i class="nav-dot"></i><span>Configurações</span>
+    </a>
+    <a class="nav-link" href="../../pages/admin/perfil.html">
+      <i class="nav-dot"></i><span>Perfil</span>
+    </a>
+  </nav>
+</aside><main class="main"><header class="topbar"><button class="btn mobile-menu" data-mobile-menu>Menu</button><label class="search">Buscar configuração<input placeholder="Permissão, backup, empresa..."></label><button class="btn primary" data-action="toast" data-message="Configurações salvas.">Salvar alterações</button></header><section class="page"><div class="page-header"><div><div class="eyebrow">Administração</div><h1>Configurações</h1><p>Empresa, permissões, documentos, backups e controles de acesso por perfil.</p></div></div><div class="grid cols-3"><section class="panel"><h2>Perfis</h2><p><b>Administrador</b> acesso total.</p><p><b>Financeiro</b> lançamentos, comprovantes, recibos e relatórios.</p><p><b>Colaborador interno</b> visualização limitada.</p><p><b>Prestador MEI</b> apenas próprios recibos e comprovantes.</p></section><section class="panel"><h2>Permissões sensíveis</h2><p>Criar, editar e excluir lançamento; validar comprovante; gerar recibo; exportar relatório; visualizar dados sensíveis.</p></section><section class="panel"><h2>Proteção de dados</h2><p>Backup dos documentos, validação de anexos, histórico de alterações, organização por empresa e registro de data/hora.</p></section></div></section></main></div><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="../../js/config.js"></script><script src="../../js/supabase-client.js"></script><script src="../../js/app.js"></script></body></html>

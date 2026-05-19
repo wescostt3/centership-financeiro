@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gerador de recibos | CenterShip Financeiro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/app.css">
+</head>
+<body><div class="app-shell"><aside class="sidebar">
+  <a class="brand" href="../../dashboard.html">
+    <span class="logo-mark">CS</span>
+    <div>
+      <strong>CenterShip</strong>
+      <span>Financeiro interno</span>
+    </div>
+  </a>
+  <nav class="nav-group">
+    <div class="nav-label">Principal</div>
+    <a class="nav-link" href="../../dashboard.html">
+      <i class="nav-dot"></i><span>Dashboard</span>
+    </a>
+  </nav>
+  <nav class="nav-group">
+    <div class="nav-label" data-role-admin>Cadastros</div>
+    <a class="nav-link" href="../../pages/cadastros/clientes.html">
+      <i class="nav-dot"></i><span>Clientes</span>
+    </a>
+    <a class="nav-link" href="../../pages/cadastros/fornecedores.html">
+      <i class="nav-dot"></i><span>Fornecedores</span>
+    </a>
+    <a class="nav-link" href="../../pages/cadastros/colaboradores-mei.html">
+      <i class="nav-dot"></i><span>Colaboradores MEI</span>
+    </a>
+  </nav>
+  <nav class="nav-group">
+    <div class="nav-label">Financeiro</div>
+    <a class="nav-link" href="../../pages/financeiro/lancamentos.html">
+      <i class="nav-dot"></i><span>Lançamentos</span>
+    </a>
+    <a class="nav-link" href="../../pages/financeiro/contas.html">
+      <i class="nav-dot"></i><span>Contas</span>
+    </a>
+    <a class="nav-link" href="../../pages/financeiro/pagamentos-semanais.html">
+      <i class="nav-dot"></i><span>Pagamentos MEI</span>
+    </a>
+  </nav>
+  <nav class="nav-group">
+    <div class="nav-label">Documentos</div>
+    <a class="nav-link" href="../../pages/documentos/documentos.html">
+      <i class="nav-dot"></i><span>Comprovantes</span>
+    </a>
+    <a class="nav-link" href="../../pages/documentos/recibos.html">
+      <i class="nav-dot"></i><span>Recibos</span>
+    </a>
+    <a class="nav-link" href="../../pages/documentos/relatorios.html">
+      <i class="nav-dot"></i><span>Relatórios</span>
+    </a>
+  </nav>
+  <nav class="nav-group" data-role-admin>
+    <div class="nav-label">Administração</div>
+    <a class="nav-link" href="../../pages/admin/auditoria.html">
+      <i class="nav-dot"></i><span>Auditoria</span>
+    </a>
+    <a class="nav-link" href="../../pages/admin/configuracoes.html">
+      <i class="nav-dot"></i><span>Configurações</span>
+    </a>
+    <a class="nav-link" href="../../pages/admin/perfil.html">
+      <i class="nav-dot"></i><span>Perfil</span>
+    </a>
+  </nav>
+</aside><main class="main"><header class="topbar"><button class="btn mobile-menu" data-mobile-menu>Menu</button><label class="search">Buscar recibo<input placeholder="REC-2026-041, João Silva..."></label><div class="top-actions no-print"><button class="btn" data-action="print">Imprimir recibo</button><button class="btn primary" data-action="toast" data-message="Use a opção Imprimir e selecione Salvar como PDF.">Baixar PDF</button></div></header>
+<section class="page"><div class="page-header no-print"><div><div class="eyebrow">Recibo MEI</div><h1>Gerador de recibos</h1><p>Papel timbrado formal para prestação de serviço, com vínculo ao pagamento semanal e histórico do colaborador.</p></div><div class="top-actions"><button class="btn" data-action="toast" data-message="Link de WhatsApp preparado.">Enviar WhatsApp</button><button class="btn" data-action="toast" data-message="E-mail com recibo anexado preparado.">Enviar e-mail</button></div></div>
+<div class="split"><form class="panel no-print" data-receipt-form><h2>Dados do recibo</h2><div class="grid cols-2" style="margin-top:16px"><div class="field"><label>Número</label><input name="receiptNumber" value="REC-2026-041"></div><div class="field"><label>Data de emissão</label><input name="issueDate" type="date" value="2026-05-10"></div><div class="field"><label>Selecionar colaborador</label><select name="providerId" data-provider-select><option value="">Preencher manualmente</option></select></div><div class="field"><label>Prestador</label><input name="providerName" value="João Silva"></div><div class="field"><label>CPF</label><input name="providerCpf" value="123.456.789-00"></div><div class="field"><label>CNPJ MEI</label><input name="providerCnpj" value="43.228.119/0001-02"></div><div class="field"><label>Período</label><input name="period" value="06/05/2026 a 10/05/2026"></div><div class="field"><label>Serviço</label><input name="service" value="Apoio técnico em instalação de elevadores"></div><div class="field"><label>Diárias trabalhadas</label><input name="days" type="number" value="5" min="0" step="1"></div><div class="field"><label>Valor por diária</label><input name="rate" type="number" value="180" min="0" step="0.01"></div><div class="field"><label>Adicional</label><input name="bonus" type="number" value="50" min="0" step="0.01"></div><div class="field"><label>Desconto</label><input name="discount" type="number" value="0" min="0" step="0.01"></div><div class="field"><label>Forma de pagamento</label><input name="paymentMethod" value="PIX"></div><div class="field"><label>Chave PIX / Dados bancários</label><input name="paymentKey" value="2199999-0000"></div><div class="field"><label>Data do pagamento</label><input name="paymentDate" type="date" value="2026-05-10"></div><div class="field"><label>Empresa pagadora</label><input name="companyName" value="CenterShip Elevadores"></div><div class="field"><label>CNPJ da empresa</label><input name="companyCnpj" value="00.000.000/0001-00"></div><div class="field"><label>Cidade/UF</label><input name="companyLocation" value="Rio de Janeiro, RJ"></div><div class="field"><label>E-mail financeiro</label><input name="companyEmail" value="financeiro@centership.com.br"></div></div><div class="top-actions" style="justify-content:flex-start;margin-top:16px"><button type="button" class="btn primary" data-action="update-receipt">Atualizar prévia</button><button type="button" class="btn" data-action="save-receipt">Salvar recibo</button><button type="button" class="btn" data-action="print">Imprimir recibo</button></div></form>
+<article class="receipt-paper" id="receipt"><div class="receipt-head"><div style="display:flex;gap:12px;align-items:center"><img src="../../public/images/brand/centership-logo.svg" alt="CenterShip" style="width:180px;border-radius:12px"><div><h2 data-receipt="companyName">CenterShip Elevadores</h2><p><span>CNPJ </span><span data-receipt="companyCnpj">00.000.000/0001-00</span><br><span data-receipt="companyLocation">Rio de Janeiro, RJ</span> · <span data-receipt="companyEmail">financeiro@centership.com.br</span></p></div></div><div><div class="eyebrow" data-receipt="receiptNumber">REC-2026-041</div><strong data-receipt="issueDate">10/05/2026</strong></div></div><h1 style="font-size:30px;margin-top:28px">Recibo de Prestação de Serviço MEI</h1><p>Declaro, para os devidos fins, que recebi da empresa <strong data-receipt="companyName">CenterShip Elevadores</strong> o valor descrito neste recibo, referente à prestação de serviços realizada no período informado, conforme acordo comercial entre as partes.</p><div class="grid cols-2"><p><b>Prestador:</b><br><span data-receipt="providerName">João Silva</span><br>CPF <span data-receipt="providerCpf">123.456.789-00</span><br>CNPJ MEI <span data-receipt="providerCnpj">43.228.119/0001-02</span></p><p><b>Serviço prestado:</b><br><span data-receipt="service">Apoio técnico em instalação de elevadores</span><br>Período: <span data-receipt="period">06/05/2026 a 10/05/2026</span></p><p><b>Quantidade de diárias:</b><br><span data-receipt="days">5</span> diárias x <span data-receipt="rate">R$ 180,00</span></p><p><b>Forma de pagamento:</b><br><span data-receipt="paymentMethod">PIX</span> · Chave/Dados: <span data-receipt="paymentKey">2199999-0000</span><br>Data do pagamento: <span data-receipt="paymentDate">10/05/2026</span></p></div><div class="panel" style="background:oklch(98% 0.003 250)"><div class="grid cols-3"><p>Valor bruto<br><strong class="money" data-receipt="gross">R$ 900,00</strong></p><p>Adicional/Desconto<br><strong class="money" data-receipt="adjustments">R$ 50,00</strong></p><p>Total pago<br><strong class="money" data-receipt="total">R$ 950,00</strong></p></div></div><p style="font-size:12px">Este documento refere-se exclusivamente à comprovação de pagamento por prestação de serviço, não caracterizando vínculo empregatício.</p><div class="signature-grid"><div class="signature" data-receipt="companyName">CenterShip Elevadores</div><div class="signature"><span data-receipt="providerName">João Silva</span> · Prestador MEI</div></div></article></div></section></main></div><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="../../js/config.js"></script><script src="../../js/supabase-client.js"></script><script src="../../js/app.js"></script></body></html>

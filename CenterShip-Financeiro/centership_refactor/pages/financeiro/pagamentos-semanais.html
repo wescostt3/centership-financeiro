@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pagamentos semanais MEI | CenterShip Financeiro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/app.css">
+</head>
+<body>
+<div class="app-shell"><aside class="sidebar">
+  <a class="brand" href="../../dashboard.html">
+    <span class="logo-mark">CS</span>
+    <div>
+      <strong>CenterShip</strong>
+      <span>Financeiro interno</span>
+    </div>
+  </a>
+  <nav class="nav-group">
+    <div class="nav-label">Principal</div>
+    <a class="nav-link" href="../../dashboard.html">
+      <i class="nav-dot"></i><span>Dashboard</span>
+    </a>
+  </nav>
+  <nav class="nav-group">
+    <div class="nav-label" data-role-admin>Cadastros</div>
+    <a class="nav-link" href="../../pages/cadastros/clientes.html">
+      <i class="nav-dot"></i><span>Clientes</span>
+    </a>
+    <a class="nav-link" href="../../pages/cadastros/fornecedores.html">
+      <i class="nav-dot"></i><span>Fornecedores</span>
+    </a>
+    <a class="nav-link" href="../../pages/cadastros/colaboradores-mei.html">
+      <i class="nav-dot"></i><span>Colaboradores MEI</span>
+    </a>
+  </nav>
+  <nav class="nav-group">
+    <div class="nav-label">Financeiro</div>
+    <a class="nav-link" href="../../pages/financeiro/lancamentos.html">
+      <i class="nav-dot"></i><span>Lançamentos</span>
+    </a>
+    <a class="nav-link" href="../../pages/financeiro/contas.html">
+      <i class="nav-dot"></i><span>Contas</span>
+    </a>
+    <a class="nav-link" href="../../pages/financeiro/pagamentos-semanais.html">
+      <i class="nav-dot"></i><span>Pagamentos MEI</span>
+    </a>
+  </nav>
+  <nav class="nav-group">
+    <div class="nav-label">Documentos</div>
+    <a class="nav-link" href="../../pages/documentos/documentos.html">
+      <i class="nav-dot"></i><span>Comprovantes</span>
+    </a>
+    <a class="nav-link" href="../../pages/documentos/recibos.html">
+      <i class="nav-dot"></i><span>Recibos</span>
+    </a>
+    <a class="nav-link" href="../../pages/documentos/relatorios.html">
+      <i class="nav-dot"></i><span>Relatórios</span>
+    </a>
+  </nav>
+  <nav class="nav-group" data-role-admin>
+    <div class="nav-label">Administração</div>
+    <a class="nav-link" href="../../pages/admin/auditoria.html">
+      <i class="nav-dot"></i><span>Auditoria</span>
+    </a>
+    <a class="nav-link" href="../../pages/admin/configuracoes.html">
+      <i class="nav-dot"></i><span>Configurações</span>
+    </a>
+    <a class="nav-link" href="../../pages/admin/perfil.html">
+      <i class="nav-dot"></i><span>Perfil</span>
+    </a>
+  </nav>
+</aside>
+<main class="main"><header class="topbar"><button class="btn mobile-menu" data-mobile-menu>Menu</button><label class="search">Buscar<input placeholder="Colaborador, semana, comprovante..."></label><div class="top-actions"><button class="btn" data-action="toast" data-message="Comprovante anexado ao pagamento.">Anexar comprovante</button><a class="btn primary" href="recibos.html">Gerar recibo</a></div></header>
+<section class="page"><div class="page-header"><div><div class="eyebrow">Semana 06/05/2026 a 10/05/2026</div><h1>Controle semanal de pagamentos</h1><p>Cálculo automático de diárias, adicionais, descontos e total líquido a pagar aos colaboradores MEI.</p></div><button class="btn dark" data-action="toast" data-message="Pagamento marcado como validado.">Validar lote semanal</button></div>
+<div class="split"><form class="panel" data-weekly-calc><h2>Novo pagamento MEI</h2><div class="grid cols-2" style="margin-top:16px"><div class="field"><label>Semana</label><select><option>06/05/2026 a 10/05/2026</option></select></div><div class="field"><label>Colaborador</label><select><option>João Silva</option><option>Marcos Lima</option><option>Rafael Souza</option></select></div><div class="field"><label>Diárias trabalhadas</label><input name="days" type="number" value="5"></div><div class="field"><label>Valor por diária</label><input name="rate" type="number" value="180"></div><div class="field"><label>Adicional</label><input name="bonus" type="number" value="50"></div><div class="field"><label>Desconto</label><input name="discount" type="number" value="0"></div><div class="field"><label>Data do pagamento</label><input type="date" value="2026-05-10"></div><div class="field"><label>Forma</label><select><option>PIX</option><option>Transferência</option><option>TED</option></select></div><div class="field"><label>Status</label><select><option>Pago</option><option>Pendente</option><option>Em análise</option></select></div><div class="field"><label>Comprovante</label><input type="file" accept=".pdf,.png,.jpg,.jpeg"></div></div><div class="panel" style="margin-top:16px;background:oklch(98% 0.003 250)"><div class="grid cols-2"><p>Total bruto<br><strong class="money" data-gross>R$ 900,00</strong></p><p>Total líquido<br><strong class="money" data-net>R$ 950,00</strong></p></div></div><div class="top-actions" style="justify-content:flex-start;margin-top:16px"><button type="button" class="btn primary" data-action="toast" data-message="Pagamento semanal salvo.">Salvar pagamento</button><button type="button" class="btn" data-action="toast" data-message="Recibo vinculado ao histórico do colaborador.">Salvar no histórico</button></div></form>
+<aside class="panel"><h2>Resumo do lote</h2><div class="metric-card" style="margin-top:14px"><span class="metric-label">Total da semana</span><div class="metric-value">R$ 38.950</div><span class="metric-note">18 colaboradores, 212 diárias</span></div><p><span class="status paid">14 pagos</span> <span class="status pending">3 pendentes</span> <span class="status analysis">1 validação</span></p><h3>Pendências</h3><p>Marcos Lima: comprovante PIX ausente.</p><p>Equipe Instalação B: adicional aguardando aprovação da diretoria.</p></aside></div>
+<section class="table-card" style="margin-top:16px"><div class="panel" style="border:0"><h2>Histórico semanal</h2></div><div class="table-wrap"><table><thead><tr><th>Colaborador</th><th>Semana</th><th>Diárias</th><th>Diária</th><th>Adicional</th><th>Desconto</th><th>Total pago</th><th>Status</th><th>Recibo</th></tr></thead><tbody><tr><td>João Silva</td><td>06/05 a 10/05</td><td>5</td><td class="money">R$ 180,00</td><td class="money">R$ 50,00</td><td class="money">R$ 0,00</td><td class="money">R$ 950,00</td><td><span class="status paid">Pago</span></td><td>REC-2026-041</td></tr><tr><td>Marcos Lima</td><td>06/05 a 10/05</td><td>6</td><td class="money">R$ 180,00</td><td class="money">R$ 40,00</td><td class="money">R$ 0,00</td><td class="money">R$ 1.120,00</td><td><span class="status pending">Comprovante pendente</span></td><td>Emitir</td></tr><tr><td>Rafael Souza</td><td>06/05 a 10/05</td><td>4</td><td class="money">R$ 215,00</td><td class="money">R$ 0,00</td><td class="money">R$ 0,00</td><td class="money">R$ 860,00</td><td><span class="status paid">Pago</span></td><td>REC-2026-039</td></tr></tbody></table></div></section></section></main></div><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="../../js/config.js"></script><script src="../../js/supabase-client.js"></script><script src="../../js/app.js"></script></body></html>

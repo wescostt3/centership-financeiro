@@ -10,10 +10,68 @@
 <body>
 <div class="app-shell">
   <aside class="sidebar">
-    <a class="brand" href="index.html"><span class="logo-mark">CS</span><div><strong>CenterShip</strong><span>Financeiro interno</span></div></a>
-    <nav class="nav-group"><div class="nav-label">Principal</div><a class="nav-link active" href="dashboard.html"><i class="nav-dot"></i><span>Dashboard geral</span></a><a class="nav-link" href="lancamentos.html"><i class="nav-dot"></i><span>Lançamentos</span></a><a class="nav-link" href="documentos.html"><i class="nav-dot"></i><span>Comprovantes</span></a><a class="nav-link" href="contas.html"><i class="nav-dot"></i><span>Contas</span></a></nav>
-    <nav class="nav-group"><div class="nav-label">Gestão</div><a class="nav-link" href="pagamentos-semanais.html"><i class="nav-dot"></i><span>Pagamentos MEI</span></a><a class="nav-link" href="recibos.html"><i class="nav-dot"></i><span>Recibos</span></a><a class="nav-link" href="relatorios.html"><i class="nav-dot"></i><span>Relatórios</span></a><a class="nav-link" href="auditoria.html"><i class="nav-dot"></i><span>Auditoria</span></a></nav>
-  </aside>
+  <a class="brand" href="dashboard.html">
+    <span class="logo-mark">CS</span>
+    <div>
+      <strong>CenterShip</strong>
+      <span>Financeiro interno</span>
+    </div>
+  </a>
+  <nav class="nav-group">
+    <div class="nav-label">Principal</div>
+    <a class="nav-link" href="dashboard.html">
+      <i class="nav-dot"></i><span>Dashboard</span>
+    </a>
+  </nav>
+  <nav class="nav-group">
+    <div class="nav-label" data-role-admin>Cadastros</div>
+    <a class="nav-link" href="pages/cadastros/clientes.html">
+      <i class="nav-dot"></i><span>Clientes</span>
+    </a>
+    <a class="nav-link" href="pages/cadastros/fornecedores.html">
+      <i class="nav-dot"></i><span>Fornecedores</span>
+    </a>
+    <a class="nav-link" href="pages/cadastros/colaboradores-mei.html">
+      <i class="nav-dot"></i><span>Colaboradores MEI</span>
+    </a>
+  </nav>
+  <nav class="nav-group">
+    <div class="nav-label">Financeiro</div>
+    <a class="nav-link" href="pages/financeiro/lancamentos.html">
+      <i class="nav-dot"></i><span>Lançamentos</span>
+    </a>
+    <a class="nav-link" href="pages/financeiro/contas.html">
+      <i class="nav-dot"></i><span>Contas</span>
+    </a>
+    <a class="nav-link" href="pages/financeiro/pagamentos-semanais.html">
+      <i class="nav-dot"></i><span>Pagamentos MEI</span>
+    </a>
+  </nav>
+  <nav class="nav-group">
+    <div class="nav-label">Documentos</div>
+    <a class="nav-link" href="pages/documentos/documentos.html">
+      <i class="nav-dot"></i><span>Comprovantes</span>
+    </a>
+    <a class="nav-link" href="pages/documentos/recibos.html">
+      <i class="nav-dot"></i><span>Recibos</span>
+    </a>
+    <a class="nav-link" href="pages/documentos/relatorios.html">
+      <i class="nav-dot"></i><span>Relatórios</span>
+    </a>
+  </nav>
+  <nav class="nav-group" data-role-admin>
+    <div class="nav-label">Administração</div>
+    <a class="nav-link" href="pages/admin/auditoria.html">
+      <i class="nav-dot"></i><span>Auditoria</span>
+    </a>
+    <a class="nav-link" href="pages/admin/configuracoes.html">
+      <i class="nav-dot"></i><span>Configurações</span>
+    </a>
+    <a class="nav-link" href="pages/admin/perfil.html">
+      <i class="nav-dot"></i><span>Perfil</span>
+    </a>
+  </nav>
+</aside>
   <main class="main">
     <header class="topbar"><button class="btn mobile-menu" data-mobile-menu>Menu</button><label class="search">Buscar<input placeholder="Cliente, colaborador, NF, comprovante..."></label><div class="top-actions"><button class="btn" data-action="toast" data-message="Validações abertas.">Validar comprovantes</button><a class="btn primary" href="lancamentos.html">Novo lançamento</a></div></header>
     <section class="page">

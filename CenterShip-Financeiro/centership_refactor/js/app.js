@@ -131,7 +131,23 @@ async function requireAuthForPrivatePages() {
   if (publicPages.includes(base)) return;
   if (!window.CenterShipDB) return;
   const session = await window.CenterShipDB.getSession();
-  if (!session) location.href = 'login.html';
+  if (!session) {
+    location.href = location.pathname.includes('/pages/') ? '../../login.html' : 'login.html';
+    return;
+  }
+  
+  // Apply Roles
+  const role = session.user?.user_metadata?.role || session.user?.user_metadata?.profile || 'colaborador';
+  if (role !== 'admin') {
+    document.querySelectorAll('[data-role-admin]').forEach(el => el.remove());
+  }
+
+  // Set active link in sidebar based on current pathname
+  document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+    if (location.pathname.includes(link.getAttribute('href').replace('../../', ''))) {
+      link.classList.add('active');
+    }
+  });
 }
 
 async function handleLoginForms() {
@@ -303,7 +319,7 @@ function handleLogout() {
   document.querySelectorAll('[data-logout]').forEach((button) => {
     button.addEventListener('click', async () => {
       await window.CenterShipDB?.signOut();
-      location.href = 'login.html';
+      location.href = location.pathname.includes('/pages/') ? '../../login.html' : 'login.html';
     });
   });
 }
