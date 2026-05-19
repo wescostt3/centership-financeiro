@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard geral | CenterShip Financeiro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <a class="brand" href="index.html"><span class="logo-mark">CS</span><div><strong>CenterShip</strong><span>Financeiro interno</span></div></a>
+    <nav class="nav-group"><div class="nav-label">Principal</div><a class="nav-link active" href="dashboard.html"><i class="nav-dot"></i><span>Dashboard geral</span></a><a class="nav-link" href="lancamentos.html"><i class="nav-dot"></i><span>Lançamentos</span></a><a class="nav-link" href="documentos.html"><i class="nav-dot"></i><span>Comprovantes</span></a><a class="nav-link" href="contas.html"><i class="nav-dot"></i><span>Contas</span></a></nav>
+    <nav class="nav-group"><div class="nav-label">Gestão</div><a class="nav-link" href="pagamentos-semanais.html"><i class="nav-dot"></i><span>Pagamentos MEI</span></a><a class="nav-link" href="recibos.html"><i class="nav-dot"></i><span>Recibos</span></a><a class="nav-link" href="relatorios.html"><i class="nav-dot"></i><span>Relatórios</span></a><a class="nav-link" href="auditoria.html"><i class="nav-dot"></i><span>Auditoria</span></a></nav>
+  </aside>
+  <main class="main">
+    <header class="topbar"><button class="btn mobile-menu" data-mobile-menu>Menu</button><label class="search">Buscar<input placeholder="Cliente, colaborador, NF, comprovante..."></label><div class="top-actions"><button class="btn" data-action="toast" data-message="Validações abertas.">Validar comprovantes</button><a class="btn primary" href="lancamentos.html">Novo lançamento</a></div></header>
+    <section class="page">
+      <div class="page-header"><div><div class="eyebrow">Maio 2026</div><h1>Dashboard financeiro</h1><p>Resumo executivo do mês atual com alertas operacionais e visão de caixa.</p></div><div class="top-actions"><button class="btn">Exportar PDF</button><button class="btn dark">Fechamento mensal</button></div></div>
+      <form class="filter-bar">
+        <div class="field"><label>Mês</label><select><option>Maio</option><option>Abril</option></select></div><div class="field"><label>Ano</label><select><option>2026</option><option>2025</option></select></div><div class="field"><label>Categoria</label><select><option>Todas</option><option>MEI</option><option>Peças</option></select></div><div class="field"><label>Movimentação</label><select><option>Entrada e saída</option><option>Entrada</option><option>Saída</option></select></div><div class="field"><label>Status</label><select><option>Todos</option><option>Pago</option><option>Pendente</option><option>Atrasado</option></select></div><div class="field"><label>Responsável</label><select><option>Todos</option><option>Financeiro</option><option>Diretoria</option></select></div>
+      </form>
+      <div class="grid cols-6">
+        <article class="metric-card"><div class="metric-top"><span class="metric-label">Entradas</span><span class="icon-box">+</span></div><div class="metric-value">R$ 286.450</div><span class="metric-note trend up">+12,4% vs abril</span></article>
+        <article class="metric-card"><div class="metric-top"><span class="metric-label">Saídas</span><span class="icon-box">-</span></div><div class="metric-value">R$ 192.870</div><span class="metric-note trend down">67% do faturamento</span></article>
+        <article class="metric-card"><div class="metric-top"><span class="metric-label">Saldo atual</span><span class="icon-box">=</span></div><div class="metric-value">R$ 184.220</div><span class="metric-note">3 contas bancárias</span></article>
+        <article class="metric-card"><div class="metric-top"><span class="metric-label">Lucro mensal</span><span class="icon-box">%</span></div><div class="metric-value">R$ 93.580</div><span class="metric-note trend up">margem 32,7%</span></article>
+        <article class="metric-card"><div class="metric-top"><span class="metric-label">Pago a MEIs</span><span class="icon-box">M</span></div><div class="metric-value">R$ 38.950</div><span class="metric-note">18 colaboradores</span></article>
+        <article class="metric-card"><div class="metric-top"><span class="metric-label">Pendências</span><span class="icon-box">!</span></div><div class="metric-value">27</div><span class="metric-note trend warn">9 comprovantes sem validação</span></article>
+      </div>
+      <div class="grid cols-6" style="margin-top:16px">
+        <article class="metric-card"><span class="metric-label">NF emitidas</span><div class="metric-value">36</div><span class="metric-note">R$ 241.900</span></article><article class="metric-card"><span class="metric-label">NF recebidas</span><div class="metric-value">58</div><span class="metric-note">R$ 76.420</span></article><article class="metric-card"><span class="metric-label">Fixas</span><div class="metric-value">R$ 42.800</div><span class="metric-note">contabilidade, sistemas, garagem</span></article><article class="metric-card"><span class="metric-label">Variáveis</span><div class="metric-value">R$ 96.310</div><span class="metric-note">peças, combustível, diária</span></article><article class="metric-card"><span class="metric-label">A pagar</span><div class="metric-value">R$ 61.240</div><span class="metric-note trend warn">12 vencem em 7 dias</span></article><article class="metric-card"><span class="metric-label">A receber</span><div class="metric-value">R$ 104.600</div><span class="metric-note">R$ 18.900 vencido</span></article>
+      </div>
+      <div class="grid cols-2" style="margin-top:16px">
+        <section class="panel"><div class="page-header" style="margin:0"><div><h2>Entradas x saídas</h2><p>Comparativo financeiro dos últimos 6 meses.</p></div></div><div class="chart"><div class="bar-pair"><span class="bar" style="height:55%"></span><span class="bar out" style="height:48%"></span></div><div class="bar-pair"><span class="bar" style="height:60%"></span><span class="bar out" style="height:54%"></span></div><div class="bar-pair"><span class="bar" style="height:68%"></span><span class="bar out" style="height:52%"></span></div><div class="bar-pair"><span class="bar" style="height:72%"></span><span class="bar out" style="height:63%"></span></div><div class="bar-pair"><span class="bar" style="height:78%"></span><span class="bar out" style="height:58%"></span></div><div class="bar-pair"><span class="bar" style="height:88%"></span><span class="bar out" style="height:61%"></span></div></div></section>
+        <section class="panel"><h2>Evolução do saldo</h2><p>Linha executiva de caixa disponível e projeção semanal.</p><div class="line-chart"></div></section>
+      </div>
+      <div class="grid cols-3" style="margin-top:16px">
+        <section class="panel"><h2>Gastos por categoria</h2><div style="display:flex;align-items:center;gap:22px;margin-top:20px"><div class="donut"></div><div><p><b>Peças e ferramentas</b><br>MEI semanal<br>Combustível e transporte<br>Sistemas e impostos</p></div></div></section>
+        <section class="panel"><h2>Alertas internos</h2><p><span class="status late">Pagamento vencido</span></p><p><span class="status pending">Comprovante não anexado</span></p><p><span class="status analysis">Recibo pendente de emissão</span></p><p><span class="status late">Nota fiscal ausente</span></p></section>
+        <section class="panel"><h2>Pagamentos por colaborador</h2><p class="money">João Silva — R$ 950,00</p><p class="money">Marcos Lima — R$ 1.120,00</p><p class="money">Rafael Souza — R$ 860,00</p><p class="money">Equipe Instalação B — R$ 4.840,00</p></section>
+      </div>
+      <section class="table-card" style="margin-top:16px"><div class="panel" style="border:0"><h2>Movimentações críticas</h2></div><div class="table-wrap"><table><thead><tr><th>Data</th><th>Tipo</th><th>Descrição</th><th>Categoria</th><th>Valor</th><th>Status</th><th>Documento</th></tr></thead><tbody><tr><td>16/05/2026</td><td>Saída</td><td>Pagamento semanal João Silva</td><td>Colaborador MEI</td><td class="money">R$ 950,00</td><td><span class="status paid">Pago</span></td><td>PIX validado</td></tr><tr><td>15/05/2026</td><td>Entrada</td><td>Contrato manutenção Ed. Atlântico</td><td>Contrato recorrente</td><td class="money">R$ 12.800,00</td><td><span class="status paid">Recebido</span></td><td>NF-e 1182</td></tr><tr><td>14/05/2026</td><td>Saída</td><td>Compra de inversores e sensores</td><td>Peças</td><td class="money">R$ 18.420,00</td><td><span class="status analysis">Em análise</span></td><td>NF recebida</td></tr></tbody></table></div></section>
+    </section>
+  </main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="js/config.js"></script><script src="js/supabase-client.js"></script><script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Colaboradores MEI | CenterShip Financeiro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <a class="brand" href="dashboard.html"><img class="brand-logo" src="public/images/brand/centership-logo.svg" alt="CenterShip"></a>
+    <nav class="nav-group">
+      <div class="nav-label">Principal</div>
+      <a class="nav-link" href="dashboard.html"><i class="nav-dot"></i><span>Dashboard</span></a>
+      <a class="nav-link" href="cadastros.html"><i class="nav-dot"></i><span>Cadastros</span></a>
+      <a class="nav-link active" href="colaboradores-mei.html"><i class="nav-dot"></i><span>Colaboradores MEI</span></a>
+      <a class="nav-link" href="pagamentos-semanais.html"><i class="nav-dot"></i><span>Pagamentos MEI</span></a>
+      <a class="nav-link" href="recibos.html"><i class="nav-dot"></i><span>Recibos</span></a>
+    </nav>
+  </aside>
+  <main class="main">
+    <header class="topbar">
+      <button class="btn mobile-menu" data-mobile-menu>Menu</button>
+      <label class="search">Buscar colaborador<input placeholder="Nome, CPF, CNPJ, PIX..." data-search-cadastros></label>
+      <div class="top-actions">
+        <button class="btn primary" type="button" data-open-cadastro="colaborador_mei">Cadastrar colaborador</button>
+        <a class="btn" href="pagamentos-semanais.html">Pagamento semanal</a>
+      </div>
+    </header>
+    <section class="page">
+      <div class="page-header">
+        <div>
+          <div class="eyebrow">Prestadores</div>
+          <h1>Colaboradores MEI</h1>
+          <p>Dados cadastrais, PIX, diária padrão, status e histórico financeiro de prestadores.</p>
+        </div>
+      </div>
+      <div class="grid cols-3" data-cadastros-grid data-cadastros-tipo="colaborador_mei">
+        <article class="panel" data-empty-state>
+          <h2>Nenhum colaborador cadastrado</h2>
+          <p>Clique em <b>Cadastrar colaborador</b> para adicionar o primeiro prestador MEI.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+</div>
+
+<dialog id="cadastro-modal" class="modal">
+  <form method="dialog" class="panel" data-cadastro-form>
+    <div class="modal-header"><div><div class="eyebrow">Novo colaborador</div><h2>Cadastrar colaborador MEI</h2></div><button class="btn ghost" type="button" data-close-modal>Fechar</button></div>
+    <div class="grid cols-2" style="margin-top:16px">
+      <input type="hidden" name="tipo" value="colaborador_mei">
+      <div class="field"><label>Nome / Razão social</label><input name="nome" required></div>
+      <div class="field"><label>CPF ou CNPJ</label><input name="documento"></div>
+      <div class="field"><label>E-mail</label><input name="email" type="email"></div>
+      <div class="field"><label>Telefone</label><input name="telefone"></div>
+      <div class="field"><label>Chave PIX</label><input name="pix"></div>
+      <div class="field"><label>Diária padrão</label><input name="diaria_padrao" type="number" min="0" step="0.01"></div>
+      <div class="field"><label>Status</label><select name="status"><option value="ativo">Ativo</option><option value="pendente">Pendente</option><option value="inativo">Inativo</option></select></div>
+      <div class="field"><label>Observações</label><textarea name="observacoes" rows="3"></textarea></div>
+    </div>
+    <div class="top-actions" style="justify-content:flex-start;margin-top:16px"><button class="btn primary" type="submit">Salvar colaborador</button></div>
+  </form>
+</dialog>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="js/config.js"></script><script src="js/supabase-client.js"></script><script src="js/app.js"></script>
+</body>
+</html>

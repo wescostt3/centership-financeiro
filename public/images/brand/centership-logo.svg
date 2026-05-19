@@ -1,0 +1,11 @@
+<svg width="420" height="110" viewBox="0 0 420 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="420" height="110" rx="24" fill="#0B0D10"/>
+  <rect x="22" y="22" width="66" height="66" rx="18" fill="#141820" stroke="#C89422" stroke-width="3"/>
+  <path d="M42 65c-7-3-11-9-11-18 0-12 9-21 23-21 7 0 13 2 17 5l-7 11c-3-2-6-3-10-3-6 0-10 4-10 9s4 8 11 8h5v13h-6c-4 0-8-.8-12-2Z" fill="#F5F7FA"/>
+  <path d="M63 80c-8 0-15-2-20-7l7-11c4 3 8 5 13 5 5 0 8-2 8-5 0-4-4-5-10-7-10-3-19-7-19-18 0-10 8-17 21-17 7 0 13 2 18 6l-7 11c-4-3-7-4-11-4-5 0-7 2-7 5 0 3 4 5 10 7 10 3 19 7 19 18 0 10-8 17-22 17Z" fill="#C89422"/>
+  <text x="110" y="49" fill="#FFFFFF" font-family="Poppins, Arial, sans-serif" font-size="31" font-weight="800" letter-spacing="-.8">CenterShip</text>
+  <text x="112" y="78" fill="#C8CCD4" font-family="Poppins, Arial, sans-serif" font-size="18" font-weight="500">Financeiro interno</text>
+  <path d="M337 32h48c6 0 11 5 11 11v24c0 6-5 11-11 11h-48c-6 0-11-5-11-11V43c0-6 5-11 11-11Z" stroke="#C89422" stroke-width="2"/>
+  <path d="M339 66h44" stroke="#C89422" stroke-width="4" stroke-linecap="round"/>
+  <path d="M339 47h44" stroke="#F5F7FA" stroke-width="4" stroke-linecap="round"/>
+</svg>

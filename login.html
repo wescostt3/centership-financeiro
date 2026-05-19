@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login | CenterShip Financeiro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+  <main class="login-page">
+    <section class="login-card">
+      <img class="login-logo" src="public/images/brand/centership-logo.svg" alt="CenterShip Financeiro">
+      <div class="eyebrow">Acesso seguro</div>
+      <h1>Entrar no sistema financeiro</h1>
+      <p>Use o e-mail e a senha cadastrados para acessar dashboard, cadastros, recibos e relatórios internos.</p>
+
+      <form data-login-form class="form-stack">
+        <div class="field"><label>E-mail</label><input name="email" type="email" value="financeiro@centership.com.br" required></div>
+        <div class="field"><label>Senha</label><input name="password" type="password" value="centership" required></div>
+        <button class="btn primary" type="submit">Entrar no sistema</button>
+        <button class="btn ghost" type="button" data-action="toast" data-message="Quando o Supabase estiver configurado, a recuperação de senha poderá ser ativada.">Recuperar senha</button>
+      </form>
+
+      <details class="signup-box">
+        <summary>Cadastrar novo usuário interno</summary>
+        <form data-signup-form class="form-stack">
+          <div class="field"><label>Nome</label><input name="name" placeholder="Nome do usuário" required></div>
+          <div class="field"><label>E-mail</label><input name="email" type="email" placeholder="usuario@empresa.com.br" required></div>
+          <div class="field"><label>Senha provisória</label><input name="password" type="password" minlength="6" placeholder="Mínimo 6 caracteres" required></div>
+          <div class="field"><label>Perfil</label><select name="profile"><option>Administrador</option><option>Financeiro</option><option>Colaborador interno</option><option>Prestador MEI</option></select></div>
+          <button class="btn" type="submit">Criar usuário</button>
+        </form>
+      </details>
+    </section>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="js/config.js"></script><script src="js/supabase-client.js"></script><script src="js/app.js"></script>
+</body>
+</html>

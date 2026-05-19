@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cadastros | CenterShip Financeiro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<div class="app-shell"><aside class="sidebar"><a class="brand" href="dashboard.html"><img class="brand-logo" src="public/images/brand/centership-logo.svg" alt="CenterShip"></a><nav class="nav-group"><a class="nav-link" href="dashboard.html"><i class="nav-dot"></i><span>Dashboard</span></a><a class="nav-link active" href="cadastros.html"><i class="nav-dot"></i><span>Cadastros</span></a><a class="nav-link" href="pagamentos-semanais.html"><i class="nav-dot"></i><span>MEI</span></a></nav></aside><main class="main"><header class="topbar"><button class="btn mobile-menu" data-mobile-menu>Menu</button><label class="search">Buscar cadastro<input placeholder="Cliente, fornecedor, prestador MEI..." data-search-cadastros></label><div class="top-actions"><button class="btn" data-open-cadastro="cliente">Cadastrar cliente</button><button class="btn" data-open-cadastro="fornecedor">Cadastrar fornecedor</button><button class="btn primary" data-open-cadastro="colaborador_mei">Cadastrar colaborador</button><button class="btn ghost" data-logout>Sair</button></div></header><section class="page"><div class="page-header"><div><div class="eyebrow">Base operacional</div><h1>Clientes, fornecedores e colaboradores MEI</h1><p>Cadastro com dados fiscais, contato, histórico financeiro, notas e pendências.</p></div></div><div class="grid cols-3" data-cadastros-grid><article class="panel"><h2>Colaborador MEI</h2><p><b>João Silva</b><br>CPF 123.456.789-00<br>CNPJ 43.228.119/0001-02<br>PIX 2199999-0000<br>Diária padrão: R$ 180,00</p><span class="status paid">Ativo</span></article><article class="panel"><h2>Cliente</h2><p><b>Edifício Atlântico</b><br>CNPJ 12.345.678/0001-10<br>Manutenção mensal<br>Histórico recebido: R$ 76.800</p><span class="status paid">Sem pendências</span></article><article class="panel"><h2>Fornecedor</h2><p><b>Elev Parts Brasil</b><br>CNPJ 22.555.111/0001-80<br>Peças e sensores<br>Notas anexadas: 18</p><span class="status analysis">2 notas em análise</span></article></div></section></main></div>
+
+<dialog class="modal" id="cadastro-modal">
+  <form method="dialog" class="modal-card" data-cadastro-form>
+    <div class="modal-header"><div><div class="eyebrow">Novo registro</div><h2>Cadastrar informação</h2></div><button class="btn ghost" type="button" data-close-modal>Fechar</button></div>
+    <div class="grid cols-2 form-grid">
+      <div class="field"><label>Tipo</label><select name="tipo" required><option value="colaborador_mei">Colaborador MEI</option><option value="cliente">Cliente</option><option value="fornecedor">Fornecedor</option></select></div>
+      <div class="field"><label>Status</label><select name="status"><option value="ativo">Ativo</option><option value="pendente">Pendente</option><option value="inativo">Inativo</option></select></div>
+      <div class="field"><label>Nome / Razão social</label><input name="nome" required placeholder="Nome completo ou empresa"></div>
+      <div class="field"><label>Documento</label><input name="documento" placeholder="CPF, CNPJ ou CNPJ MEI"></div>
+      <div class="field"><label>E-mail</label><input name="email" type="email" placeholder="email@empresa.com.br"></div>
+      <div class="field"><label>Telefone / WhatsApp</label><input name="telefone" placeholder="(21) 99999-0000"></div>
+      <div class="field"><label>PIX</label><input name="pix" placeholder="Chave PIX"></div>
+      <div class="field"><label>Diária padrão</label><input name="diaria_padrao" type="number" min="0" step="0.01" placeholder="180.00"></div>
+      <div class="field span-2"><label>Observações</label><textarea name="observacoes" rows="3" placeholder="Serviço, histórico, pendências ou observações importantes"></textarea></div>
+    </div>
+    <div class="modal-actions"><button class="btn ghost" type="reset">Limpar</button><button class="btn primary" type="submit">Salvar cadastro</button></div>
+  </form>
+</dialog>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="js/config.js"></script><script src="js/supabase-client.js"></script><script src="js/app.js"></script>
+</body></html>

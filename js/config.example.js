@@ -1,0 +1,6 @@
+window.CENTERSHIP_CONFIG = {
+  SUPABASE_URL: 'https://SEU-PROJETO.supabase.co',
+  SUPABASE_ANON_KEY: 'SUA_CHAVE_ANON_PUBLICA',
+  REDIRECT_AFTER_LOGIN: 'dashboard.html',
+  REDIRECT_IF_LOGGED_OUT: 'login.html'
+};
