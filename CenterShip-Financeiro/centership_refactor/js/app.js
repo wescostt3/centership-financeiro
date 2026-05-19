@@ -187,11 +187,36 @@ async function handleLoginForms() {
 }
 
 function cadastroCard(row) {
-  const tipoLabel = row.tipo === 'colaborador_mei' ? 'Colaborador MEI' : row.tipo === 'fornecedor' ? 'Fornecedor' : 'Cliente';
+  const isColaborador = row.tipo === 'colaborador_mei';
+  const tipoLabel = isColaborador
+    ? (row.regime_contrato === 'clt' ? 'Colaborador CLT' : 'Colaborador MEI')
+    : row.tipo === 'fornecedor' ? 'Fornecedor' : 'Cliente';
   const statusClass = row.status === 'pendente' ? 'analysis' : row.status === 'inativo' ? 'overdue' : 'paid';
-  const fields = [row.documento, row.email, row.telefone, row.pix ? `PIX ${row.pix}` : '', row.diaria_padrao ? `Diária padrão: ${financeApp.money(row.diaria_padrao)}` : '', row.observacoes].filter(Boolean);
+
+  let fields = [row.documento, row.email, row.telefone].filter(Boolean);
+
+  if (isColaborador) {
+    if (row.regime_contrato === 'mei') {
+      if (row.cnpj_mei) fields.push(`CNPJ MEI: ${row.cnpj_mei}`);
+      if (row.pix) fields.push(`PIX: ${row.pix}`);
+      if (row.diaria_padrao) fields.push(`Diária padrão: ${financeApp.money(row.diaria_padrao)}`);
+    } else if (row.regime_contrato === 'clt') {
+      if (row.cargo) fields.push(`Cargo: ${row.cargo}`);
+      if (row.salario_base) fields.push(`Salário base: ${financeApp.money(row.salario_base)}`);
+    }
+  }
+
+  if (row.observacoes) fields.push(row.observacoes);
+
+  const regimeBadge = isColaborador && row.regime_contrato
+    ? `<span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:2px 8px;border-radius:20px;background:${row.regime_contrato === 'clt' ? 'oklch(92% 0.04 220)' : 'oklch(94% 0.06 78)'};color:${row.regime_contrato === 'clt' ? 'oklch(35% 0.12 220)' : 'oklch(42% 0.12 60)'}">${row.regime_contrato.toUpperCase()}</span>`
+    : '';
+
   return `<article class="panel" data-cadastro-card data-search-text="${financeApp.text([tipoLabel, row.nome, ...fields, row.status].join(' ')).toLowerCase()}">
-    <h2>${financeApp.text(tipoLabel)}</h2>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+      <h2 style="margin:0">${financeApp.text(tipoLabel)}</h2>
+      ${regimeBadge}
+    </div>
     <p><b>${financeApp.text(row.nome || 'Sem nome')}</b>${fields.length ? `<br>${fields.map((field) => financeApp.text(field)).join('<br>')}` : ''}</p>
     <span class="status ${statusClass}">${financeApp.text(row.status || 'ativo')}</span>
   </article>`;
@@ -298,8 +323,12 @@ function handleCadastroForms() {
       documento: data.documento,
       email: data.email,
       telefone: data.telefone,
-      pix: data.pix,
+      regime_contrato: data.regime_contrato || null,
+      cnpj_mei: data.cnpj_mei || null,
+      pix: data.pix || null,
       diaria_padrao: data.diaria_padrao ? Number(data.diaria_padrao) : null,
+      cargo: data.cargo || null,
+      salario_base: data.salario_base ? Number(data.salario_base) : null,
       observacoes: data.observacoes,
       status: data.status || 'ativo'
     };

@@ -2,10 +2,13 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Colaboradores MEI | CenterShip Financeiro</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <title>Colaboradores | CenterShip Financeiro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  
   <link rel="stylesheet" href="../../css/app.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
 <div class="app-shell">
@@ -80,9 +83,9 @@
     <section class="page">
       <div class="page-header">
         <div>
-          <div class="eyebrow">Prestadores</div>
-          <h1>Colaboradores MEI</h1>
-          <p>Dados cadastrais, PIX, diária padrão, status e histórico financeiro de prestadores.</p>
+          <div class="eyebrow">Equipe</div>
+          <h1>Colaboradores</h1>
+          <p>Dados cadastrais de colaboradores CLT e prestadores MEI, com regime de contrato, PIX e diária padrão.</p>
         </div>
       </div>
       <div class="grid cols-3" data-cadastros-grid data-cadastros-tipo="colaborador_mei">
@@ -96,22 +99,102 @@
 </div>
 
 <dialog id="cadastro-modal" class="modal">
-  <form method="dialog" class="panel" data-cadastro-form>
-    <div class="modal-header"><div><div class="eyebrow">Novo colaborador</div><h2>Cadastrar colaborador MEI</h2></div><button class="btn ghost" type="button" data-close-modal>Fechar</button></div>
-    <div class="grid cols-2" style="margin-top:16px">
-      <input type="hidden" name="tipo" value="colaborador_mei">
-      <div class="field"><label>Nome / Razão social</label><input name="nome" required></div>
-      <div class="field"><label>CPF ou CNPJ</label><input name="documento"></div>
-      <div class="field"><label>E-mail</label><input name="email" type="email"></div>
-      <div class="field"><label>Telefone</label><input name="telefone"></div>
-      <div class="field"><label>Chave PIX</label><input name="pix"></div>
-      <div class="field"><label>Diária padrão</label><input name="diaria_padrao" type="number" min="0" step="0.01"></div>
-      <div class="field"><label>Status</label><select name="status"><option value="ativo">Ativo</option><option value="pendente">Pendente</option><option value="inativo">Inativo</option></select></div>
-      <div class="field"><label>Observações</label><textarea name="observacoes" rows="3"></textarea></div>
+  <form method="dialog" class="panel" data-cadastro-form style="max-width: 640px">
+    <div class="modal-header">
+      <div><div class="eyebrow">Novo colaborador</div><h2>Cadastrar colaborador</h2></div>
+      <button class="btn ghost" type="button" data-close-modal>Fechar</button>
     </div>
-    <div class="top-actions" style="justify-content:flex-start;margin-top:16px"><button class="btn primary" type="submit">Salvar colaborador</button></div>
+    <div class="grid cols-2" style="margin-top:16px; gap: 16px">
+      <input type="hidden" name="tipo" value="colaborador_mei">
+
+      <div class="field">
+        <label>Regime de contrato</label>
+        <select name="regime_contrato" id="regime-contrato-select" required>
+          <option value="">Selecione...</option>
+          <option value="clt">CLT — Carteira Assinada</option>
+          <option value="mei">MEI — Prestador Autônomo</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Status</label>
+        <select name="status">
+          <option value="ativo">Ativo</option>
+          <option value="pendente">Pendente</option>
+          <option value="inativo">Inativo</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Nome completo</label>
+        <input name="nome" required placeholder="Nome do colaborador">
+      </div>
+
+      <div class="field">
+        <label>CPF</label>
+        <input name="documento" placeholder="000.000.000-00">
+      </div>
+
+      <div class="field">
+        <label>E-mail</label>
+        <input name="email" type="email" placeholder="email@empresa.com">
+      </div>
+
+      <div class="field">
+        <label>Telefone / WhatsApp</label>
+        <input name="telefone" placeholder="(21) 99999-0000">
+      </div>
+
+      <!-- Campos exclusivos MEI (mostrados apenas quando regime = mei) -->
+      <div class="field" id="field-cnpj-mei" hidden>
+        <label>CNPJ MEI</label>
+        <input name="cnpj_mei" placeholder="00.000.000/0001-00">
+      </div>
+
+      <div class="field" id="field-pix" hidden>
+        <label>Chave PIX</label>
+        <input name="pix" placeholder="CPF, e-mail ou telefone">
+      </div>
+
+      <div class="field" id="field-diaria" hidden>
+        <label>Diária padrão (R$)</label>
+        <input name="diaria_padrao" type="number" min="0" step="0.01" placeholder="180.00">
+      </div>
+
+      <!-- Campos exclusivos CLT (mostrados apenas quando regime = clt) -->
+      <div class="field" id="field-cargo" hidden>
+        <label>Cargo / Função</label>
+        <input name="cargo" placeholder="Técnico de elevadores, administrativo...">
+      </div>
+
+      <div class="field" id="field-salario" hidden>
+        <label>Salário base (R$)</label>
+        <input name="salario_base" type="number" min="0" step="0.01" placeholder="2000.00">
+      </div>
+
+      <div class="field span-2">
+        <label>Observações</label>
+        <textarea name="observacoes" rows="3" placeholder="Informações adicionais"></textarea>
+      </div>
+    </div>
+    <div class="top-actions" style="justify-content:flex-start;margin-top:16px">
+      <button class="btn primary" type="submit">Salvar colaborador</button>
+    </div>
   </form>
 </dialog>
+
+<script>
+  // Exibir/ocultar campos conforme regime selecionado
+  document.getElementById('regime-contrato-select')?.addEventListener('change', function() {
+    const isMei = this.value === 'mei';
+    const isClt = this.value === 'clt';
+    document.getElementById('field-cnpj-mei').hidden = !isMei;
+    document.getElementById('field-pix').hidden = !isMei;
+    document.getElementById('field-diaria').hidden = !isMei;
+    document.getElementById('field-cargo').hidden = !isClt;
+    document.getElementById('field-salario').hidden = !isClt;
+  });
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="../../js/config.js"></script><script src="../../js/supabase-client.js"></script><script src="../../js/app.js"></script>
 </body>
