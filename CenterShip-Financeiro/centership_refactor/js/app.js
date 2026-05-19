@@ -125,9 +125,10 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function requireAuthForPrivatePages() {
-  const publicPages = ['login.html', 'landing.html', 'index.html'];
   const current = location.pathname.split('/').pop() || 'index.html';
-  if (publicPages.includes(current)) return;
+  const base = current.replace('.html', '');
+  const publicPages = ['login', 'landing', 'index', ''];
+  if (publicPages.includes(base)) return;
   if (!window.CenterShipDB) return;
   const session = await window.CenterShipDB.getSession();
   if (!session) location.href = 'login.html';
