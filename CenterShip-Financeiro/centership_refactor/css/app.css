@@ -557,28 +557,53 @@ td.money,.money{font-family:var(--mono);font-variant-numeric:tabular-nums}
   background:rgba(255,255,255,0.97);
   border:1px solid rgba(255,255,255,0.15);
   border-radius:var(--radius);
-  padding:clamp(20px,4vw,44px);
+  padding:24px 28px;
   box-shadow:var(--shadow-card);
   color:#111;
+  font-size:13px;
 }
+.receipt-paper h1{font-size:22px;margin-top:16px}
+.receipt-paper h2{font-size:16px}
 .receipt-paper h1,.receipt-paper h2,.receipt-paper h3,.receipt-paper strong,.receipt-paper b{color:#111}
-.receipt-paper p{color:#333;line-height:1.7}
+.receipt-paper p{color:#333;line-height:1.5;margin:0 0 4px}
 .receipt-paper span{color:#222}
-.receipt-paper .eyebrow{color:#666}
+.receipt-paper .eyebrow{color:#666;font-size:10px}
 .receipt-paper .money{color:#111}
-.receipt-paper .panel{background:#f5f6f8;border:1px solid #e2e4e8;color:#111}
-.receipt-paper .panel p{color:#333}
+.receipt-paper .panel{background:#f5f6f8;border:1px solid #e2e4e8;color:#111;padding:12px;margin-top:12px}
+.receipt-paper .panel p{color:#333;margin:0}
 .receipt-paper .panel strong{color:#111}
-.receipt-head{display:flex;justify-content:space-between;gap:16px;border-bottom:2px solid #111;padding-bottom:20px}
-.receipt-head p{color:#555}
-.signature-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:44px}
-.signature{border-top:1px solid #111;padding-top:8px;text-align:center;color:#555}
+.receipt-paper .grid.cols-2{gap:8px;margin-top:10px}
+.receipt-paper .grid.cols-3{gap:8px}
+.receipt-head{display:flex;justify-content:space-between;gap:12px;border-bottom:2px solid #111;padding-bottom:12px}
+.receipt-head p{color:#555;font-size:12px;margin:0}
+.receipt-head img{width:140px}
+.signature-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:28px}
+.signature{border-top:1px solid #111;padding-top:6px;text-align:center;color:#555;font-size:12px}
 .split{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(280px,.65fr);gap:16px;align-items:start}
 
 @media print{
+  @page{size:A4;margin:12mm 14mm}
   .sidebar,.topbar,.no-print{display:none!important}
   .app-shell{display:block}
-  body{background:white;color:#111}
+  .split{display:block}
+  body{background:white;color:#111;font-size:12px}
+  .page{padding:0}
   .glass,.glass-sm,.glass-strong{background:white;border:1px solid #ddd;backdrop-filter:none}
-  .receipt-paper{box-shadow:none;border:0}
+  .receipt-paper{
+    box-shadow:none;border:0;
+    padding:0;font-size:12px;
+    page-break-inside:avoid;
+    break-inside:avoid;
+  }
+  .receipt-paper h1{font-size:20px;margin-top:12px}
+  .receipt-paper h2{font-size:14px}
+  .receipt-paper p{font-size:12px;line-height:1.45;margin:0 0 3px}
+  .receipt-paper .panel{padding:8px;margin-top:8px}
+  .receipt-head{padding-bottom:8px}
+  .receipt-head img{width:120px}
+  .signature-grid{margin-top:20px;gap:24px}
+  .signature{font-size:11px;padding-top:4px}
+  .receipt-paper .grid.cols-2{gap:4px;margin-top:6px}
+  .receipt-paper .grid.cols-3{gap:4px}
+  .receipt-paper .eyebrow{font-size:9px}
 }
