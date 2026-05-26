@@ -91,6 +91,7 @@ create table if not exists public.propostas (
   valor numeric(12,2) not null,
   data_validade date,
   forma_pagamento text,
+  prazo_execucao text,
   itens text,
   observacoes text,
   status text default 'pendente' check (status in ('pendente', 'aprovada', 'rejeitada', 'cancelada')),

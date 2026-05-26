@@ -157,6 +157,10 @@ document.addEventListener('click', (event) => {
     financeApp.updateReceipt(action.closest('form'));
     financeApp.toast('Prévia do recibo atualizada.');
   }
+  if (type === 'update-preview') {
+    window.updatePreviewUI?.();
+    financeApp.toast('Prévia da proposta atualizada.');
+  }
 });
 
 document.addEventListener('input', (event) => {
@@ -433,6 +437,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   handlePropostasFilters();
   await loadPropostas();
   document.querySelectorAll('[data-proposal-form]').forEach((form) => financeApp.updateProposalPreview(form));
+  await loadProposalEditMode();
 });
 
 document.addEventListener('click', async (event) => {
@@ -481,19 +486,29 @@ document.addEventListener('click', async (event) => {
     return;
   }
 
+  const proposalId = data.proposalId;
+
   try {
-    await window.CenterShipDB.createProposta({
+    const payload = {
       numero_proposta: data.proposalNumber,
       cliente_id: data.clientId,
       servico_descricao: data.serviceDesc,
       valor: total,
       data_validade: data.validityDate || null,
       forma_pagamento: data.paymentTerms,
+      prazo_execucao: data.executionTime,
       itens: JSON.stringify(items),
-      observacoes: data.observations,
-      status: 'pendente'
-    });
-    financeApp.toast('Proposta comercial salva com sucesso! Redirecionando...');
+      observacoes: data.observations
+    };
+
+    if (proposalId) {
+      await window.CenterShipDB.updateProposta(proposalId, payload);
+      financeApp.toast('Proposta comercial atualizada com sucesso! Redirecionando...');
+    } else {
+      payload.status = 'pendente';
+      await window.CenterShipDB.createProposta(payload);
+      financeApp.toast('Proposta comercial salva com sucesso! Redirecionando...');
+    }
     setTimeout(() => {
       location.href = 'propostas.html';
     }, 1500);
@@ -603,13 +618,14 @@ function renderPropostasTable(propostas, cadastros) {
         <td><span style="color:var(--muted); font-size:12.5px">${financeApp.date(prop.data_validade)}</span></td>
         <td><span class="status ${statusClass}">${financeApp.text(prop.status)}</span></td>
         <td>
-          <div style="display:flex; gap:8px">
+          <div style="display:flex; gap:8px; align-items:center">
             <select onchange="updatePropStatus('${prop.id}', this.value)" style="min-height:30px; font-size:11px; padding:2px 8px; border-radius:6px; background:rgba(255,255,255,0.06); color:var(--fg); border:1px solid var(--glass-border)">
               <option value="pendente" ${prop.status === 'pendente' ? 'selected' : ''}>Pendente</option>
               <option value="aprovada" ${prop.status === 'aprovada' ? 'selected' : ''}>Aprovada</option>
               <option value="rejeitada" ${prop.status === 'rejeitada' ? 'selected' : ''}>Rejeitada</option>
               <option value="cancelada" ${prop.status === 'cancelada' ? 'selected' : ''}>Cancelada</option>
             </select>
+            <a href="nova-proposta.html?id=${prop.id}" class="btn small" style="min-height:30px; font-size:11px; padding:4px 8px; border-radius:6px; display:inline-flex; align-items:center; background:rgba(255,255,255,0.06); border:1px solid var(--glass-border); color:var(--fg);">Visualizar</a>
           </div>
         </td>
       </tr>
@@ -651,3 +667,94 @@ window.updatePreviewUI = function() {
     financeApp.updateProposalPreview(form);
   }
 };
+
+async function loadProposalEditMode() {
+  const form = document.querySelector('[data-proposal-form]');
+  if (!form || !window.CenterShipDB) return;
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const proposalId = urlParams.get('id');
+  if (!proposalId) return;
+
+  try {
+    const propostas = await window.CenterShipDB.listPropostas();
+    const proposta = propostas.find(p => p.id === proposalId);
+    if (!proposta) {
+      financeApp.toast('Proposta comercial não encontrada.');
+      return;
+    }
+
+    const eyebrow = document.querySelector('.page-header .eyebrow');
+    if (eyebrow) eyebrow.textContent = 'Editar Orçamento';
+    const h1 = document.querySelector('.page-header h1');
+    if (h1) h1.textContent = 'Editar Proposta';
+
+    let idInput = form.querySelector('[name="proposalId"]');
+    if (!idInput) {
+      idInput = document.createElement('input');
+      idInput.type = 'hidden';
+      idInput.name = 'proposalId';
+      form.appendChild(idInput);
+    }
+    idInput.value = proposalId;
+
+    form.elements['proposalNumber'].value = proposta.numero_proposta || '';
+    form.elements['validityDate'].value = proposta.data_validade || '';
+    form.elements['clientId'].value = proposta.cliente_id || '';
+    form.elements['serviceDesc'].value = proposta.servico_descricao || '';
+    form.elements['paymentTerms'].value = proposta.forma_pagamento || '';
+    form.elements['executionTime'].value = proposta.prazo_execucao || '';
+    form.elements['observations'].value = proposta.observacoes || '';
+
+    // Set client values on preview
+    const clientSelect = form.elements['clientId'];
+    if (clientSelect) {
+      clientSelect.dispatchEvent(new Event('change'));
+    }
+
+    // Recreate dynamic items
+    const container = document.getElementById('dynamic-items-container');
+    if (container) {
+      container.innerHTML = '';
+      let items = [];
+      try {
+        items = typeof proposta.itens === 'string' ? JSON.parse(proposta.itens) : (proposta.itens || []);
+      } catch (e) {
+        items = [];
+      }
+
+      if (items.length === 0) {
+        window.rowCount = 0;
+        if (typeof window.addProposalRow === 'function') {
+          window.addProposalRow();
+        }
+      } else {
+        window.rowCount = 0;
+        items.forEach((item, idx) => {
+          const newRow = document.createElement('div');
+          newRow.className = 'dynamic-item-row';
+          newRow.setAttribute('data-item-index', idx);
+          newRow.innerHTML = `
+            <div class="field">
+              <input name="item_desc_${idx}" value="${financeApp.text(item.desc)}" required>
+            </div>
+            <div class="field">
+              <input name="item_qty_${idx}" type="number" value="${item.qty}" min="1" required style="padding-inline: 8px">
+            </div>
+            <div class="field">
+              <input name="item_price_${idx}" type="number" value="${item.price}" min="0" step="0.01" required>
+            </div>
+            <button class="btn danger small" type="button" onclick="removeProposalRow(this)" style="min-height:42px; border-radius:8px">🗑</button>
+          `;
+          container.appendChild(newRow);
+          window.rowCount++;
+        });
+      }
+    }
+
+    // Update proposal preview
+    window.updatePreviewUI?.();
+  } catch (error) {
+    financeApp.toast('Erro ao carregar proposta comercial.');
+  }
+}

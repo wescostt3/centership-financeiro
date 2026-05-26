@@ -197,6 +197,7 @@
       <div class="split">
         <!-- FORMULÁRIO -->
         <form class="panel no-print" data-proposal-form style="background: var(--glass); border: 1px solid var(--glass-border); border-radius: var(--radius)">
+          <input type="hidden" name="proposalId" value="">
           <h2>Dados da Proposta</h2>
           
           <div class="grid cols-2" style="margin-top:16px; gap: 14px;">
@@ -362,27 +363,27 @@
 <script src="../../js/supabase-client.js"></script>
 <script src="../../js/app.js"></script>
 <script>
-  let rowCount = 2;
+  window.rowCount = 2;
   
   function addProposalRow() {
     const container = document.getElementById('dynamic-items-container');
     const newRow = document.createElement('div');
     newRow.className = 'dynamic-item-row';
-    newRow.setAttribute('data-item-index', rowCount);
+    newRow.setAttribute('data-item-index', window.rowCount);
     newRow.innerHTML = `
       <div class="field">
-        <input name="item_desc_${rowCount}" placeholder="Descrição do item" required>
+        <input name="item_desc_${window.rowCount}" placeholder="Descrição do item" required>
       </div>
       <div class="field">
-        <input name="item_qty_${rowCount}" type="number" value="1" min="1" required style="padding-inline: 8px">
+        <input name="item_qty_${window.rowCount}" type="number" value="1" min="1" required style="padding-inline: 8px">
       </div>
       <div class="field">
-        <input name="item_price_${rowCount}" type="number" value="0" min="0" step="0.01" required>
+        <input name="item_price_${window.rowCount}" type="number" value="0" min="0" step="0.01" required>
       </div>
       <button class="btn danger small" type="button" onclick="removeProposalRow(this)" style="min-height:42px; border-radius:8px">🗑</button>
     `;
     container.appendChild(newRow);
-    rowCount++;
+    window.rowCount++;
     updatePreviewUI();
   }
 

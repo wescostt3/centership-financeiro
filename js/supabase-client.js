@@ -116,6 +116,22 @@
       return data;
     },
 
+    async updateProposta(id, payload) {
+      if (!client) {
+        const rows = localRead('centership_propostas');
+        const idx = rows.findIndex(r => r.id === id);
+        if (idx !== -1) {
+          rows[idx] = { ...rows[idx], ...payload, updated_at: new Date().toISOString() };
+          localWrite('centership_propostas', rows);
+          return rows[idx];
+        }
+        return null;
+      }
+      const { data, error } = await client.from('propostas').update(payload).eq('id', id).select().single();
+      if (error) throw error;
+      return data;
+    },
+
     async updatePropostaStatus(id, status) {
       if (!client) {
         const rows = localRead('centership_propostas');
