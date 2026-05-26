@@ -95,8 +95,16 @@ create table if not exists public.propostas (
   itens text,
   observacoes text,
   status text default 'pendente' check (status in ('pendente', 'aprovada', 'rejeitada', 'cancelada')),
+  usar_valor_manual boolean default false,
+  valor_manual numeric(12,2),
+  porcentagem_entrada numeric(5,2),
   created_at timestamptz not null default now()
 );
+
+-- Caso a tabela já exista e queira atualizar a estrutura:
+-- alter table public.propostas add column if not exists usar_valor_manual boolean default false;
+-- alter table public.propostas add column if not exists valor_manual numeric(12,2);
+-- alter table public.propostas add column if not exists porcentagem_entrada numeric(5,2);
 
 alter table public.propostas enable row level security;
 

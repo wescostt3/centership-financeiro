@@ -65,9 +65,19 @@ const financeApp = {
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
     
+    // Toggle manual field visibility
+    const campoManual = form.querySelector('#campo-valor-manual');
+    if (campoManual) {
+      if (data.valorTotalTipo === 'manual') {
+        campoManual.style.display = 'block';
+      } else {
+        campoManual.style.display = 'none';
+      }
+    }
+
     const items = [];
     const rows = form.querySelectorAll('.dynamic-item-row');
-    let total = 0;
+    let totalCalculado = 0;
     
     rows.forEach(row => {
       const idx = row.dataset.itemIndex;
@@ -75,12 +85,19 @@ const financeApp = {
       const qty = Number(form.elements[`item_qty_${idx}`]?.value || 0);
       const price = Number(form.elements[`item_price_${idx}`]?.value || 0);
       const subtotal = qty * price;
-      total += subtotal;
+      totalCalculado += subtotal;
       
       if (desc) {
         items.push({ desc, qty, price, subtotal });
       }
     });
+
+    const total = data.valorTotalTipo === 'manual'
+      ? Number(data.valorManual || 0)
+      : totalCalculado;
+
+    const porcentagemEntrada = Number(data.porcentagemEntrada || 0);
+    const valorEntrada = total * (porcentagemEntrada / 100);
 
     const tbody = document.querySelector('[data-prop-items-tbody]');
     if (tbody) {
@@ -106,7 +123,9 @@ const financeApp = {
       paymentTerms: data.paymentTerms || '',
       executionTime: data.executionTime || '',
       observations: data.observations || '',
-      totalValue: this.money(total)
+      totalValue: this.money(total),
+      porcentagemEntrada: String(porcentagemEntrada),
+      valorEntrada: this.money(valorEntrada)
     };
 
     Object.entries(values).forEach(([key, value]) => {
@@ -114,6 +133,15 @@ const financeApp = {
         node.textContent = value;
       });
     });
+
+    const previewEntradaRow = document.getElementById('preview-entrada-row');
+    if (previewEntradaRow) {
+      if (porcentagemEntrada > 0) {
+        previewEntradaRow.style.display = 'flex';
+      } else {
+        previewEntradaRow.style.display = 'none';
+      }
+    }
 
     return { total, items };
   },
@@ -281,6 +309,13 @@ document.addEventListener('input', (event) => {
     financeApp.updateReceipt(receiptForm);
   }
 
+  const proposalForm = event.target.closest('[data-proposal-form]');
+  if (proposalForm) {
+    financeApp.updateProposalPreview(proposalForm);
+  }
+});
+
+document.addEventListener('change', (event) => {
   const proposalForm = event.target.closest('[data-proposal-form]');
   if (proposalForm) {
     financeApp.updateProposalPreview(proposalForm);
@@ -629,7 +664,10 @@ document.addEventListener('click', async (event) => {
       forma_pagamento: data.paymentTerms,
       prazo_execucao: data.executionTime,
       itens: JSON.stringify(items),
-      observacoes: data.observations
+      observacoes: data.observations,
+      usar_valor_manual: data.valorTotalTipo === 'manual',
+      valor_manual: data.valorTotalTipo === 'manual' ? Number(data.valorManual || 0) : null,
+      porcentagem_entrada: Number(data.porcentagemEntrada || 0)
     };
 
     if (proposalId) {
@@ -839,6 +877,16 @@ async function loadProposalEditMode() {
     form.elements['paymentTerms'].value = proposta.forma_pagamento || '';
     form.elements['executionTime'].value = proposta.prazo_execucao || '';
     form.elements['observations'].value = proposta.observacoes || '';
+    
+    if (form.elements['valorTotalTipo']) {
+      form.elements['valorTotalTipo'].value = proposta.usar_valor_manual ? 'manual' : 'calculado';
+    }
+    if (form.elements['valorManual']) {
+      form.elements['valorManual'].value = proposta.valor_manual || '';
+    }
+    if (form.elements['porcentagemEntrada']) {
+      form.elements['porcentagemEntrada'].value = proposta.porcentagem_entrada || 0;
+    }
 
     // Set client values on preview directly for robustness
     if (proposta.cliente_id) {

@@ -258,6 +258,25 @@
             </div>
           </div>
 
+          <h2 style="margin-top:20px; font-size:16px">Configurações de Valor e Entrada</h2>
+          <div class="grid cols-2" style="margin-top:12px; gap: 14px; margin-bottom: 20px;">
+            <div class="field">
+              <label>Cálculo do Valor Total</label>
+              <select name="valorTotalTipo" id="valor-total-tipo" required>
+                <option value="calculado">Calcular pelos itens (automático)</option>
+                <option value="manual">Digitar valor total fixo (manual)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Porcentagem de Entrada (%)</label>
+              <input name="porcentagemEntrada" type="number" min="0" max="100" value="0">
+            </div>
+            <div class="field span-2" id="campo-valor-manual" style="display: none;">
+              <label>Valor Total Fixo (R$)</label>
+              <input name="valorManual" type="number" min="0" step="0.01" placeholder="Digite o valor total em reais, ex: 8500.00">
+            </div>
+          </div>
+
           <h2 style="margin-top:20px; font-size:16px">Itens da Proposta</h2>
           
           <div id="dynamic-items-container" style="margin-top:12px">
@@ -353,10 +372,14 @@
             </tbody>
           </table>
 
-          <div class="panel" style="margin-top: 10px; padding: 12px">
+          <div class="panel" style="margin-top: 10px; padding: 12px; display: flex; flex-direction: column; gap: 8px;">
             <div style="display:flex; justify-content: space-between; align-items: center">
               <span style="font-weight:700; text-transform:uppercase; font-size:12px; color:#333">Valor Total da Proposta:</span>
               <strong class="money" data-prop="totalValue" style="font-size:18px; color:#111">R$ 3.900,00</strong>
+            </div>
+            <div id="preview-entrada-row" style="display:none; justify-content: space-between; align-items: center; border-top: 1px dashed #ddd; padding-top: 8px;">
+              <span style="font-size:12px; color:#555">Entrada solicitada para início (<span data-prop="porcentagemEntrada">0</span>%):</span>
+              <strong class="money" data-prop="valorEntrada" style="font-size:14px; color:#333">R$ 0,00</strong>
             </div>
           </div>
 
