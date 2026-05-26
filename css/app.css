@@ -585,6 +585,7 @@ td.money,.money{font-family:var(--mono);font-variant-numeric:tabular-nums}
   @page{size:A4;margin:12mm 14mm}
   .sidebar,.topbar,.no-print{display:none!important}
   .app-shell{display:block}
+  .main{display:block!important}
   .split{display:block}
   body{background:white;color:#111;font-size:12px}
   .page{padding:0}

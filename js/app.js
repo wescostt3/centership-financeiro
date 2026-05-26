@@ -116,6 +116,94 @@ const financeApp = {
     });
 
     return { total, items };
+  },
+
+  sendProposalWhatsApp() {
+    const proposalNumber = document.querySelector('[data-prop="proposalNumber"]')?.textContent || '';
+    const clientName = document.querySelector('[data-prop="clientName"]')?.textContent || '';
+    const clientPhone = document.querySelector('[data-prop="clientPhone"]')?.textContent || '';
+    const totalValue = document.querySelector('[data-prop="totalValue"]')?.textContent || '';
+    const serviceDesc = document.querySelector('[data-prop="serviceDesc"]')?.textContent || '';
+    const paymentTerms = document.querySelector('[data-prop="paymentTerms"]')?.textContent || '';
+
+    let text = `Olá! Segue a Proposta Comercial *${proposalNumber}* da *CenterShip Elevadores*.\n\n`;
+    text += `*Cliente:* ${clientName}\n`;
+    text += `*Serviço:* ${serviceDesc}\n`;
+    text += `*Valor Total:* ${totalValue}\n`;
+    text += `*Forma de Pagamento:* ${paymentTerms}\n\n`;
+    text += `Você pode visualizar ou imprimir a proposta completa pelo link:\n${window.location.href}`;
+
+    const cleanPhone = clientPhone.replace(/\D/g, '');
+    let phoneParam = '';
+    if (cleanPhone) {
+      phoneParam = cleanPhone.startsWith('55') ? cleanPhone : '55' + cleanPhone;
+    }
+    const url = phoneParam 
+      ? `https://api.whatsapp.com/send?phone=${phoneParam}&text=${encodeURIComponent(text)}`
+      : `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+    
+    window.open(url, '_blank');
+    this.toast('WhatsApp aberto!');
+  },
+
+  sendProposalEmail() {
+    const proposalNumber = document.querySelector('[data-prop="proposalNumber"]')?.textContent || '';
+    const clientName = document.querySelector('[data-prop="clientName"]')?.textContent || '';
+    const clientEmail = document.querySelector('[data-prop="clientEmail"]')?.textContent || '';
+    const totalValue = document.querySelector('[data-prop="totalValue"]')?.textContent || '';
+    const serviceDesc = document.querySelector('[data-prop="serviceDesc"]')?.textContent || '';
+    const paymentTerms = document.querySelector('[data-prop="paymentTerms"]')?.textContent || '';
+
+    const subject = `Proposta Comercial ${proposalNumber} - CenterShip Elevadores`;
+    let body = `Olá,\n\nSegue a Proposta Comercial ${proposalNumber} para ${clientName}.\n\n`;
+    body += `Serviço: ${serviceDesc}\n`;
+    body += `Valor Total: ${totalValue}\n`;
+    body += `Forma de Pagamento: ${paymentTerms}\n\n`;
+    body += `Você pode visualizar e imprimir a proposta completa através do link abaixo:\n${window.location.href}\n\n`;
+    body += `Atenciosamente,\nCenterShip Elevadores`;
+
+    const url = `mailto:${clientEmail || ''}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = url;
+    this.toast('E-mail aberto!');
+  },
+
+  sendReceiptWhatsApp() {
+    const receiptNumber = document.querySelector('[data-receipt="receiptNumber"]')?.textContent || '';
+    const providerName = document.querySelector('[data-receipt="providerName"]')?.textContent || '';
+    const service = document.querySelector('[data-receipt="service"]')?.textContent || '';
+    const total = document.querySelector('[data-receipt="total"]')?.textContent || '';
+    const paymentMethod = document.querySelector('[data-receipt="paymentMethod"]')?.textContent || '';
+
+    let text = `Olá! Segue o Recibo de Prestação de Serviço *${receiptNumber}* da *CenterShip Elevadores*.\n\n`;
+    text += `*Prestador:* ${providerName}\n`;
+    text += `*Serviço:* ${service}\n`;
+    text += `*Total Pago:* ${total}\n`;
+    text += `*Forma de Pagamento:* ${paymentMethod}\n\n`;
+    text += `Você pode visualizar ou imprimir o recibo completo pelo link:\n${window.location.href}`;
+
+    const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+    window.open(url, '_blank');
+    this.toast('WhatsApp aberto!');
+  },
+
+  sendReceiptEmail() {
+    const receiptNumber = document.querySelector('[data-receipt="receiptNumber"]')?.textContent || '';
+    const providerName = document.querySelector('[data-receipt="providerName"]')?.textContent || '';
+    const service = document.querySelector('[data-receipt="service"]')?.textContent || '';
+    const total = document.querySelector('[data-receipt="total"]')?.textContent || '';
+    const paymentMethod = document.querySelector('[data-receipt="paymentMethod"]')?.textContent || '';
+
+    const subject = `Recibo de Prestação de Serviço ${receiptNumber} - CenterShip Elevadores`;
+    let body = `Olá,\n\nSegue o Recibo de Prestação de Serviço ${receiptNumber} para ${providerName}.\n\n`;
+    body += `Serviço: ${service}\n`;
+    body += `Valor Total: ${total}\n`;
+    body += `Forma de Pagamento: ${paymentMethod}\n\n`;
+    body += `Você pode visualizar e imprimir o recibo completo através do link abaixo:\n${window.location.href}\n\n`;
+    body += `Atenciosamente,\nCenterShip Elevadores`;
+
+    const url = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = url;
+    this.toast('E-mail aberto!');
   }
 };
 
@@ -160,6 +248,18 @@ document.addEventListener('click', (event) => {
   if (type === 'update-preview') {
     window.updatePreviewUI?.();
     financeApp.toast('Prévia da proposta atualizada.');
+  }
+  if (type === 'send-whatsapp-proposal') {
+    financeApp.sendProposalWhatsApp();
+  }
+  if (type === 'send-email-proposal') {
+    financeApp.sendProposalEmail();
+  }
+  if (type === 'send-whatsapp-receipt') {
+    financeApp.sendReceiptWhatsApp();
+  }
+  if (type === 'send-email-receipt') {
+    financeApp.sendReceiptEmail();
   }
 });
 
@@ -649,14 +749,17 @@ function renderPropostasTable(propostas, cadastros) {
         <td><span style="color:var(--muted); font-size:12.5px">${financeApp.date(prop.data_validade)}</span></td>
         <td><span class="status ${statusClass}">${financeApp.text(prop.status)}</span></td>
         <td>
-          <div style="display:flex; gap:8px; align-items:center">
+          <div style="display:flex; gap:6px; align-items:center">
             <select onchange="updatePropStatus('${prop.id}', this.value)" style="min-height:30px; font-size:11px; padding:2px 8px; border-radius:6px; background:rgba(255,255,255,0.06); color:var(--fg); border:1px solid var(--glass-border)">
               <option value="pendente" ${prop.status === 'pendente' ? 'selected' : ''}>Pendente</option>
               <option value="aprovada" ${prop.status === 'aprovada' ? 'selected' : ''}>Aprovada</option>
               <option value="rejeitada" ${prop.status === 'rejeitada' ? 'selected' : ''}>Rejeitada</option>
               <option value="cancelada" ${prop.status === 'cancelada' ? 'selected' : ''}>Cancelada</option>
             </select>
-            <a href="nova-proposta.html?id=${prop.id}" class="btn small" style="min-height:30px; font-size:11px; padding:4px 8px; border-radius:6px; display:inline-flex; align-items:center; background:rgba(255,255,255,0.06); border:1px solid var(--glass-border); color:var(--fg);">Visualizar</a>
+            <a href="nova-proposta.html?id=${prop.id}" class="btn small" style="min-height:30px; font-size:11px; padding:4px 8px; border-radius:6px; display:inline-flex; align-items:center; background:rgba(255,255,255,0.06); border:1px solid var(--glass-border); color:var(--fg);" title="Editar / Visualizar">Visualizar</a>
+            <a href="nova-proposta.html?id=${prop.id}&print=true" class="btn small" style="min-height:30px; font-size:11.5px; padding:4px 6px; border-radius:6px; display:inline-flex; align-items:center; background:rgba(255,255,255,0.06); border:1px solid var(--glass-border); color:var(--fg);" title="Imprimir / Salvar PDF">🖨️</a>
+            <a href="nova-proposta.html?id=${prop.id}&whatsapp=true" class="btn small" style="min-height:30px; font-size:11.5px; padding:4px 6px; border-radius:6px; display:inline-flex; align-items:center; background:rgba(255,255,255,0.06); border:1px solid var(--glass-border); color:var(--fg);" title="Enviar WhatsApp">💬</a>
+            <a href="nova-proposta.html?id=${prop.id}&email=true" class="btn small" style="min-height:30px; font-size:11.5px; padding:4px 6px; border-radius:6px; display:inline-flex; align-items:center; background:rgba(255,255,255,0.06); border:1px solid var(--glass-border); color:var(--fg);" title="Enviar E-mail">✉️</a>
           </div>
         </td>
       </tr>
@@ -737,7 +840,23 @@ async function loadProposalEditMode() {
     form.elements['executionTime'].value = proposta.prazo_execucao || '';
     form.elements['observations'].value = proposta.observacoes || '';
 
-    // Set client values on preview
+    // Set client values on preview directly for robustness
+    if (proposta.cliente_id) {
+      try {
+        const cadastros = await window.CenterShipDB.listCadastros();
+        const client = cadastros.find(c => c.id === proposta.cliente_id);
+        if (client) {
+          document.querySelectorAll('[data-prop="clientName"]').forEach(n => n.textContent = client.nome || '-');
+          document.querySelectorAll('[data-prop="clientDoc"]').forEach(n => n.textContent = client.documento || '-');
+          document.querySelectorAll('[data-prop="clientEmail"]').forEach(n => n.textContent = client.email || '-');
+          document.querySelectorAll('[data-prop="clientPhone"]').forEach(n => n.textContent = client.telefone || '-');
+        }
+      } catch (err) {
+        console.error('Erro ao buscar cliente no preview:', err);
+      }
+    }
+
+    // Set client values on preview dropdown
     const clientSelect = form.elements['clientId'];
     if (clientSelect) {
       clientSelect.dispatchEvent(new Event('change'));
@@ -750,6 +869,9 @@ async function loadProposalEditMode() {
       let items = [];
       try {
         items = typeof proposta.itens === 'string' ? JSON.parse(proposta.itens) : (proposta.itens || []);
+        if (!Array.isArray(items)) {
+          items = [];
+        }
       } catch (e) {
         items = [];
       }
@@ -762,18 +884,19 @@ async function loadProposalEditMode() {
       } else {
         window.rowCount = 0;
         items.forEach((item, idx) => {
+          if (!item) return;
           const newRow = document.createElement('div');
           newRow.className = 'dynamic-item-row';
           newRow.setAttribute('data-item-index', idx);
           newRow.innerHTML = `
             <div class="field">
-              <input name="item_desc_${idx}" value="${financeApp.text(item.desc)}" required>
+              <input name="item_desc_${idx}" value="${financeApp.text(item.desc || item.description || '')}" required>
             </div>
             <div class="field">
-              <input name="item_qty_${idx}" type="number" value="${item.qty}" min="1" required style="padding-inline: 8px">
+              <input name="item_qty_${idx}" type="number" value="${item.qty || item.quantity || 1}" min="1" required style="padding-inline: 8px">
             </div>
             <div class="field">
-              <input name="item_price_${idx}" type="number" value="${item.price}" min="0" step="0.01" required>
+              <input name="item_price_${idx}" type="number" value="${item.price || item.unitPrice || 0}" min="0" step="0.01" required>
             </div>
             <button class="btn danger small" type="button" onclick="removeProposalRow(this)" style="min-height:42px; border-radius:8px">🗑</button>
           `;
@@ -785,6 +908,23 @@ async function loadProposalEditMode() {
 
     // Update proposal preview
     window.updatePreviewUI?.();
+
+    // Auto-run actions from URL parameters
+    if (urlParams.get('print') === 'true') {
+      setTimeout(() => {
+        window.print();
+      }, 800);
+    }
+    if (urlParams.get('whatsapp') === 'true') {
+      setTimeout(() => {
+        financeApp.sendProposalWhatsApp();
+      }, 800);
+    }
+    if (urlParams.get('email') === 'true') {
+      setTimeout(() => {
+        financeApp.sendProposalEmail();
+      }, 800);
+    }
   } catch (error) {
     financeApp.toast('Erro ao carregar proposta comercial.');
   }
