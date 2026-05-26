@@ -209,11 +209,36 @@
               <label>Data de Validade</label>
               <input name="validityDate" type="date" value="2026-06-26" required>
             </div>
-            <div class="field span-2">
-              <label>Selecionar Cliente</label>
+            <div class="field span-2" id="select-client-group">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
+                <label style="margin:0">Selecionar Cliente</label>
+                <button type="button" class="btn small" id="btn-toggle-new-client" style="padding: 2px 8px; font-size:11px; min-height: 24px;">+ Novo Cliente</button>
+              </div>
               <select name="clientId" data-client-select required>
                 <option value="">Selecione um cliente...</option>
               </select>
+            </div>
+
+            <!-- Fields for New Client -->
+            <div class="grid cols-2 span-2" id="new-client-fields" style="display:none; gap:10px; border: 1px dashed var(--glass-border); padding: 12px; border-radius: 8px; margin-top: 4px; background: rgba(255,255,255,0.02);">
+              <div class="field span-2" style="display:flex; gap:8px; align-items:flex-end;">
+                <div style="flex:1;">
+                  <label>CNPJ do Cliente</label>
+                  <input type="text" id="new-client-cnpj" placeholder="00.000.000/0001-00">
+                </div>
+                <button type="button" class="btn primary" id="btn-search-cnpj" style="min-height:42px; border-radius:8px; font-size:12px; padding-inline:16px;">Buscar CNPJ</button>
+              </div>
+              <div class="field">
+                <label>Razão Social</label>
+                <input type="text" id="new-client-name" placeholder="Preenchimento automático">
+              </div>
+              <div class="field">
+                <label>E-mail do Cliente</label>
+                <input type="email" id="new-client-email" placeholder="financeiro@exemplo.com">
+              </div>
+              <div class="field span-2" style="text-align: right; margin-top:4px; display: flex; justify-content: flex-end;">
+                <button type="button" class="btn small" id="btn-cancel-new-client" style="padding: 2px 8px; font-size:11px; min-height: 24px;">Selecionar Existente</button>
+              </div>
             </div>
             <div class="field span-2">
               <label>Descrição Principal do Serviço</label>

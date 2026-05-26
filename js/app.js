@@ -438,6 +438,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadPropostas();
   document.querySelectorAll('[data-proposal-form]').forEach((form) => financeApp.updateProposalPreview(form));
   await loadProposalEditMode();
+  initNewClientForm();
 });
 
 document.addEventListener('click', async (event) => {
@@ -481,7 +482,37 @@ document.addEventListener('click', async (event) => {
   const data = Object.fromEntries(new FormData(form).entries());
   const { total, items } = financeApp.updateProposalPreview(form);
   
-  if (!data.clientId) {
+  let clientId = data.clientId;
+  const newClientFields = document.getElementById('new-client-fields');
+  const isNewClientMode = newClientFields && newClientFields.style.display !== 'none';
+
+  if (isNewClientMode) {
+    const newName = document.getElementById('new-client-name')?.value.trim();
+    const newCnpj = document.getElementById('new-client-cnpj')?.value.trim();
+    const newEmail = document.getElementById('new-client-email')?.value.trim();
+
+    if (!newName) {
+      financeApp.toast('Por favor, informe a Razão Social do cliente.');
+      return;
+    }
+
+    try {
+      financeApp.toast('Cadastrando novo cliente...');
+      const clientRecord = await window.CenterShipDB.createCadastro({
+        tipo: 'cliente',
+        nome: newName,
+        documento: newCnpj ? 'CNPJ ' + newCnpj : '',
+        email: newEmail || '',
+        status: 'ativo'
+      });
+      clientId = clientRecord.id;
+    } catch (error) {
+      financeApp.toast('Erro ao cadastrar novo cliente.');
+      return;
+    }
+  }
+
+  if (!clientId) {
     financeApp.toast('Selecione um cliente para salvar a proposta.');
     return;
   }
@@ -491,7 +522,7 @@ document.addEventListener('click', async (event) => {
   try {
     const payload = {
       numero_proposta: data.proposalNumber,
-      cliente_id: data.clientId,
+      cliente_id: clientId,
       servico_descricao: data.serviceDesc,
       valor: total,
       data_validade: data.validityDate || null,
@@ -757,4 +788,98 @@ async function loadProposalEditMode() {
   } catch (error) {
     financeApp.toast('Erro ao carregar proposta comercial.');
   }
+}
+
+function initNewClientForm() {
+  const btnToggle = document.getElementById('btn-toggle-new-client');
+  const btnCancel = document.getElementById('btn-cancel-new-client');
+  const selectGroup = document.getElementById('select-client-group');
+  const selectField = selectGroup?.querySelector('select');
+  const newFields = document.getElementById('new-client-fields');
+
+  const btnSearch = document.getElementById('btn-search-cnpj');
+  const inputCnpj = document.getElementById('new-client-cnpj');
+  const inputName = document.getElementById('new-client-name');
+  const inputEmail = document.getElementById('new-client-email');
+
+  if (!btnToggle) return;
+
+  btnToggle.addEventListener('click', () => {
+    selectField.required = false;
+    selectField.value = '';
+    selectGroup.style.display = 'none';
+    newFields.style.display = 'grid';
+
+    // Clear preview
+    document.querySelectorAll('[data-prop="clientName"]').forEach(n => n.textContent = '-');
+    document.querySelectorAll('[data-prop="clientDoc"]').forEach(n => n.textContent = '-');
+    document.querySelectorAll('[data-prop="clientEmail"]').forEach(n => n.textContent = '-');
+  });
+
+  btnCancel.addEventListener('click', () => {
+    selectField.required = true;
+    selectGroup.style.display = 'block';
+    newFields.style.display = 'none';
+
+    // Reset inputs
+    if (inputCnpj) inputCnpj.value = '';
+    if (inputName) inputName.value = '';
+    if (inputEmail) inputEmail.value = '';
+
+    // Clear preview
+    document.querySelectorAll('[data-prop="clientName"]').forEach(n => n.textContent = '-');
+    document.querySelectorAll('[data-prop="clientDoc"]').forEach(n => n.textContent = '-');
+    document.querySelectorAll('[data-prop="clientEmail"]').forEach(n => n.textContent = '-');
+  });
+
+  inputName?.addEventListener('input', (e) => {
+    document.querySelectorAll('[data-prop="clientName"]').forEach(n => n.textContent = e.target.value || '-');
+  });
+  inputCnpj?.addEventListener('input', (e) => {
+    document.querySelectorAll('[data-prop="clientDoc"]').forEach(n => n.textContent = 'CNPJ ' + e.target.value || '-');
+  });
+  inputEmail?.addEventListener('input', (e) => {
+    document.querySelectorAll('[data-prop="clientEmail"]').forEach(n => n.textContent = e.target.value || '-');
+  });
+
+  btnSearch?.addEventListener('click', async () => {
+    const cnpj = inputCnpj.value.trim();
+    if (!cnpj) {
+      financeApp.toast('Por favor, informe o CNPJ.');
+      return;
+    }
+    const clean = cnpj.replace(/\D/g, '');
+    if (clean.length !== 14) {
+      financeApp.toast('O CNPJ deve conter 14 dígitos.');
+      return;
+    }
+    btnSearch.disabled = true;
+    const oldText = btnSearch.textContent;
+    btnSearch.textContent = 'Buscando...';
+    try {
+      const res = await fetch(`https://brasilapi.com.br/api/cnpj/v1/${clean}`);
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      
+      const nome = data.razao_social || data.nome_fantasia || '';
+      const email = data.email || '';
+      
+      if (inputName) inputName.value = nome;
+      if (inputEmail && email) inputEmail.value = email;
+
+      document.querySelectorAll('[data-prop="clientName"]').forEach(n => n.textContent = nome || '-');
+      document.querySelectorAll('[data-prop="clientDoc"]').forEach(n => n.textContent = 'CNPJ ' + cnpj || '-');
+      if (email) {
+        document.querySelectorAll('[data-prop="clientEmail"]').forEach(n => n.textContent = email || '-');
+      }
+
+      financeApp.toast('Dados do CNPJ preenchidos com sucesso.');
+    } catch (e) {
+      financeApp.toast('CNPJ não encontrado ou erro na busca. Preencha manualmente.');
+      if (inputName) inputName.placeholder = 'Razão Social';
+    } finally {
+      btnSearch.disabled = false;
+      btnSearch.textContent = oldText;
+    }
+  });
 }
