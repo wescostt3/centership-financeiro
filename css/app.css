@@ -589,21 +589,23 @@ td.money,.money{font-family:var(--mono);font-variant-numeric:tabular-nums}
   body{background:white;color:#111;font-size:12px}
   .page{padding:0}
   .glass,.glass-sm,.glass-strong{background:white;border:1px solid #ddd;backdrop-filter:none}
-  .receipt-paper{
+  .receipt-paper, .proposal-paper{
     box-shadow:none;border:0;
     padding:0;font-size:12px;
     page-break-inside:avoid;
     break-inside:avoid;
+    background:white;
+    color:#111;
   }
-  .receipt-paper h1{font-size:20px;margin-top:12px}
-  .receipt-paper h2{font-size:14px}
-  .receipt-paper p{font-size:12px;line-height:1.45;margin:0 0 3px}
-  .receipt-paper .panel{padding:8px;margin-top:8px}
-  .receipt-head{padding-bottom:8px}
-  .receipt-head img{width:120px}
+  .receipt-paper h1, .proposal-paper h1{font-size:20px;margin-top:12px;color:#111}
+  .receipt-paper h2, .proposal-paper h2{font-size:14px;color:#111;border-bottom:1px solid #111}
+  .receipt-paper p, .proposal-paper p{font-size:12px;line-height:1.45;margin:0 0 3px;color:#333}
+  .receipt-paper .panel, .proposal-paper .panel{padding:8px;margin-top:8px;background:#f5f6f8;border:1px solid #ddd}
+  .receipt-head, .proposal-head{padding-bottom:8px;border-bottom:2px solid #111}
+  .receipt-head img, .proposal-head img{width:120px}
   .signature-grid{margin-top:20px;gap:24px}
-  .signature{font-size:11px;padding-top:4px}
-  .receipt-paper .grid.cols-2{gap:4px;margin-top:6px}
-  .receipt-paper .grid.cols-3{gap:4px}
-  .receipt-paper .eyebrow{font-size:9px}
+  .signature{font-size:11px;padding-top:4px;color:#555}
+  .receipt-paper .grid.cols-2, .proposal-paper .grid.cols-2{gap:4px;margin-top:6px}
+  .receipt-paper .grid.cols-3, .proposal-paper .grid.cols-3{gap:4px}
+  .receipt-paper .eyebrow, .proposal-paper .eyebrow{font-size:9px}
 }

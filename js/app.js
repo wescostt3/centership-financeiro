@@ -58,6 +58,64 @@ const financeApp = {
     };
 
     Object.entries(values).forEach(([key, value]) => this.setReceiptValue(key, value || ''));
+  },
+
+  updateProposalPreview(form) {
+    if (!form) return;
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+    
+    const items = [];
+    const rows = form.querySelectorAll('.dynamic-item-row');
+    let total = 0;
+    
+    rows.forEach(row => {
+      const idx = row.dataset.itemIndex;
+      const desc = form.elements[`item_desc_${idx}`]?.value || '';
+      const qty = Number(form.elements[`item_qty_${idx}`]?.value || 0);
+      const price = Number(form.elements[`item_price_${idx}`]?.value || 0);
+      const subtotal = qty * price;
+      total += subtotal;
+      
+      if (desc) {
+        items.push({ desc, qty, price, subtotal });
+      }
+    });
+
+    const tbody = document.querySelector('[data-prop-items-tbody]');
+    if (tbody) {
+      if (items.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#888">Nenhum item adicionado</td></tr>`;
+      } else {
+        tbody.innerHTML = items.map(item => `
+          <tr>
+            <td>${this.text(item.desc)}</td>
+            <td style="text-align:center">${item.qty}</td>
+            <td style="text-align:right">${this.money(item.price)}</td>
+            <td style="text-align:right">${this.money(item.subtotal)}</td>
+          </tr>
+        `).join('');
+      }
+    }
+
+    const values = {
+      proposalNumber: data.proposalNumber || '',
+      currentDate: new Date().toLocaleDateString('pt-BR'),
+      validityDate: this.date(data.validityDate) || '',
+      serviceDesc: data.serviceDesc || '',
+      paymentTerms: data.paymentTerms || '',
+      executionTime: data.executionTime || '',
+      observations: data.observations || '',
+      totalValue: this.money(total)
+    };
+
+    Object.entries(values).forEach(([key, value]) => {
+      document.querySelectorAll(`[data-prop="${key}"]`).forEach((node) => {
+        node.textContent = value;
+      });
+    });
+
+    return { total, items };
   }
 };
 
@@ -118,10 +176,16 @@ document.addEventListener('input', (event) => {
   if (receiptForm) {
     financeApp.updateReceipt(receiptForm);
   }
+
+  const proposalForm = event.target.closest('[data-proposal-form]');
+  if (proposalForm) {
+    financeApp.updateProposalPreview(proposalForm);
+  }
 });
 
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('[data-receipt-form]').forEach((form) => financeApp.updateReceipt(form));
+  document.querySelectorAll('[data-proposal-form]').forEach((form) => financeApp.updateProposalPreview(form));
 });
 
 async function requireAuthForPrivatePages() {
@@ -362,6 +426,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   handleLogout();
   await loadCadastros();
   await loadReceiptProviders();
+  
+  // Propostas Comerciais
+  await loadProposalClients();
+  handleProposalClientSelect();
+  handlePropostasFilters();
+  await loadPropostas();
+  document.querySelectorAll('[data-proposal-form]').forEach((form) => financeApp.updateProposalPreview(form));
 });
 
 document.addEventListener('click', async (event) => {
@@ -395,3 +466,188 @@ document.addEventListener('click', async (event) => {
     financeApp.toast(error.message || 'Erro ao salvar recibo.');
   }
 });
+
+document.addEventListener('click', async (event) => {
+  const action = event.target.closest('[data-action="save-proposal"]');
+  if (!action) return;
+  const form = action.closest('form');
+  if (!form || !window.CenterShipDB) return;
+  
+  const data = Object.fromEntries(new FormData(form).entries());
+  const { total, items } = financeApp.updateProposalPreview(form);
+  
+  if (!data.clientId) {
+    financeApp.toast('Selecione um cliente para salvar a proposta.');
+    return;
+  }
+
+  try {
+    await window.CenterShipDB.createProposta({
+      numero_proposta: data.proposalNumber,
+      cliente_id: data.clientId,
+      servico_descricao: data.serviceDesc,
+      valor: total,
+      data_validade: data.validityDate || null,
+      forma_pagamento: data.paymentTerms,
+      itens: JSON.stringify(items),
+      observacoes: data.observations,
+      status: 'pendente'
+    });
+    financeApp.toast('Proposta comercial salva com sucesso! Redirecionando...');
+    setTimeout(() => {
+      location.href = 'propostas.html';
+    }, 1500);
+  } catch (error) {
+    financeApp.toast(error.message || 'Erro ao salvar proposta comercial.');
+  }
+});
+
+// --- PROPOSTAS COMERCIAIS LOGIC ---
+
+async function loadProposalClients() {
+  const select = document.querySelector('[data-client-select]');
+  if (!select || !window.CenterShipDB) return;
+  try {
+    const rows = await window.CenterShipDB.listCadastros();
+    const clients = rows.filter((row) => row.tipo === 'cliente');
+    clients.forEach((client) => {
+      const option = document.createElement('option');
+      option.value = client.id;
+      option.textContent = client.nome || 'Cliente sem nome';
+      option.dataset.client = JSON.stringify(client);
+      select.appendChild(option);
+    });
+  } catch (error) {
+    financeApp.toast('Não foi possível carregar clientes.');
+  }
+}
+
+function handleProposalClientSelect() {
+  document.querySelectorAll('[data-client-select]').forEach((select) => {
+    select.addEventListener('change', () => {
+      const client = select.selectedOptions[0]?.dataset.client ? JSON.parse(select.selectedOptions[0].dataset.client) : null;
+      if (!client) {
+        document.querySelectorAll('[data-prop="clientName"]').forEach(n => n.textContent = '-');
+        document.querySelectorAll('[data-prop="clientDoc"]').forEach(n => n.textContent = '-');
+        document.querySelectorAll('[data-prop="clientEmail"]').forEach(n => n.textContent = '-');
+        document.querySelectorAll('[data-prop="clientPhone"]').forEach(n => n.textContent = '-');
+        return;
+      }
+      document.querySelectorAll('[data-prop="clientName"]').forEach(n => n.textContent = client.nome || '-');
+      document.querySelectorAll('[data-prop="clientDoc"]').forEach(n => n.textContent = client.documento || '-');
+      document.querySelectorAll('[data-prop="clientEmail"]').forEach(n => n.textContent = client.email || '-');
+      document.querySelectorAll('[data-prop="clientPhone"]').forEach(n => n.textContent = client.telefone || '-');
+    });
+  });
+}
+
+async function loadPropostas() {
+  const tbody = document.querySelector('[data-propostas-tbody]');
+  if (!tbody || !window.CenterShipDB) return;
+  try {
+    const propostas = await window.CenterShipDB.listPropostas();
+    const cadastros = await window.CenterShipDB.listCadastros();
+    
+    const clientFilter = document.querySelector('[data-filter-cliente]');
+    if (clientFilter && clientFilter.options.length <= 1) {
+      const clients = cadastros.filter(c => c.tipo === 'cliente');
+      clients.forEach(c => {
+        const option = document.createElement('option');
+        option.value = c.id;
+        option.textContent = c.nome;
+        clientFilter.appendChild(option);
+      });
+    }
+    renderPropostasTable(propostas, cadastros);
+  } catch (error) {
+    financeApp.toast('Erro ao carregar propostas.');
+  }
+}
+
+function renderPropostasTable(propostas, cadastros) {
+  const tbody = document.querySelector('[data-propostas-tbody]');
+  if (!tbody) return;
+
+  const searchTerm = document.querySelector('[data-search-propostas]')?.value.trim().toLowerCase() || '';
+  const statusFilter = document.querySelector('[data-filter-status]')?.value || '';
+  const clientFilter = document.querySelector('[data-filter-cliente]')?.value || '';
+
+  const filtered = propostas.filter(prop => {
+    const client = cadastros.find(c => c.id === prop.cliente_id);
+    const clientName = client ? client.nome.toLowerCase() : '';
+    const matchSearch = !searchTerm || 
+      prop.numero_proposta?.toLowerCase().includes(searchTerm) || 
+      clientName.includes(searchTerm) || 
+      prop.servico_descricao?.toLowerCase().includes(searchTerm);
+    const matchStatus = !statusFilter || prop.status === statusFilter;
+    const matchClient = !clientFilter || prop.cliente_id === clientFilter;
+    return matchSearch && matchStatus && matchClient;
+  });
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--muted); padding:32px;">Nenhuma proposta comercial encontrada.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(prop => {
+    const client = cadastros.find(c => c.id === prop.cliente_id);
+    const clientName = client ? client.nome : 'Cliente removido';
+    const statusClass = prop.status === 'aprovada' ? 'paid' : prop.status === 'pendente' ? 'pending' : prop.status === 'rejeitada' ? 'overdue' : 'neutral';
+    
+    return `
+      <tr data-prop-id="${prop.id}">
+        <td><strong>${financeApp.text(prop.numero_proposta)}</strong></td>
+        <td>${financeApp.text(clientName)}</td>
+        <td><span style="font-size:12px; color:var(--muted)">${financeApp.text(prop.servico_descricao)}</span></td>
+        <td class="money" style="font-weight:700">${financeApp.money(prop.valor)}</td>
+        <td><span style="color:var(--muted); font-size:12.5px">${financeApp.date(prop.data_validade)}</span></td>
+        <td><span class="status ${statusClass}">${financeApp.text(prop.status)}</span></td>
+        <td>
+          <div style="display:flex; gap:8px">
+            <select onchange="updatePropStatus('${prop.id}', this.value)" style="min-height:30px; font-size:11px; padding:2px 8px; border-radius:6px; background:rgba(255,255,255,0.06); color:var(--fg); border:1px solid var(--glass-border)">
+              <option value="pendente" ${prop.status === 'pendente' ? 'selected' : ''}>Pendente</option>
+              <option value="aprovada" ${prop.status === 'aprovada' ? 'selected' : ''}>Aprovada</option>
+              <option value="rejeitada" ${prop.status === 'rejeitada' ? 'selected' : ''}>Rejeitada</option>
+              <option value="cancelada" ${prop.status === 'cancelada' ? 'selected' : ''}>Cancelada</option>
+            </select>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+async function updatePropStatus(id, newStatus) {
+  try {
+    await window.CenterShipDB.updatePropostaStatus(id, newStatus);
+    financeApp.toast(`Status da proposta comercial atualizado para ${newStatus}.`);
+    await loadPropostas();
+  } catch (error) {
+    financeApp.toast('Erro ao atualizar status da proposta.');
+  }
+}
+window.updatePropStatus = updatePropStatus;
+
+function handlePropostasFilters() {
+  const search = document.querySelector('[data-search-propostas]');
+  const status = document.querySelector('[data-filter-status]');
+  const client = document.querySelector('[data-filter-cliente]');
+
+  const triggerReload = async () => {
+    if (!window.CenterShipDB) return;
+    const propostas = await window.CenterShipDB.listPropostas();
+    const cadastros = await window.CenterShipDB.listCadastros();
+    renderPropostasTable(propostas, cadastros);
+  };
+
+  search?.addEventListener('input', triggerReload);
+  status?.addEventListener('change', triggerReload);
+  client?.addEventListener('change', triggerReload);
+}
+
+window.updatePreviewUI = function() {
+  const form = document.querySelector('[data-proposal-form]');
+  if (form) {
+    financeApp.updateProposalPreview(form);
+  }
+};

@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Propostas Comerciais | CenterShip Financeiro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="../../css/app.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    .filter-bar {
+      display: flex;
+      gap: 12px;
+      padding: 16px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .filter-bar .field {
+      flex: 1;
+      min-width: 150px;
+    }
+  </style>
+</head>
+<body>
+<div class="app-shell">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <a class="brand" href="../../dashboard.html">
+      <img class="brand-logo" src="../../public/images/brand/novo-logo.png" alt="CenterShip Elevadores" style="max-height: 48px; width: auto; display: block;">
+    </a>
+    <nav class="nav-group">
+      <div class="nav-label">Principal</div>
+      <a class="nav-link" href="../../dashboard.html">
+        <i class="nav-dot"></i><span>Dashboard</span>
+      </a>
+    </nav>
+    <nav class="nav-group">
+      <div class="nav-label" data-role-admin>Cadastros</div>
+      <a class="nav-link" href="../../pages/cadastros/clientes.html">
+        <i class="nav-dot"></i><span>Clientes</span>
+      </a>
+      <a class="nav-link" href="../../pages/cadastros/fornecedores.html">
+        <i class="nav-dot"></i><span>Fornecedores</span>
+      </a>
+      <a class="nav-link" href="../../pages/cadastros/colaboradores-mei.html">
+        <i class="nav-dot"></i><span>Colaboradores MEI</span>
+      </a>
+    </nav>
+    <nav class="nav-group">
+      <div class="nav-label">Financeiro</div>
+      <a class="nav-link" href="../../pages/financeiro/lancamentos.html">
+        <i class="nav-dot"></i><span>Lançamentos</span>
+      </a>
+      <a class="nav-link" href="../../pages/financeiro/contas.html">
+        <i class="nav-dot"></i><span>Contas</span>
+      </a>
+      <a class="nav-link" href="../../pages/financeiro/pagamentos-semanais.html">
+        <i class="nav-dot"></i><span>Pagamentos MEI</span>
+      </a>
+    </nav>
+    <nav class="nav-group">
+      <div class="nav-label">Documentos</div>
+      <a class="nav-link" href="../../pages/documentos/documentos.html">
+        <i class="nav-dot"></i><span>Comprovantes</span>
+      </a>
+      <a class="nav-link" href="../../pages/documentos/recibos.html">
+        <i class="nav-dot"></i><span>Recibos</span>
+      </a>
+      <a class="nav-link active" href="../../pages/documentos/propostas.html">
+        <i class="nav-dot"></i><span>Propostas Comerciais</span>
+      </a>
+      <a class="nav-link" href="../../pages/documentos/relatorios.html">
+        <i class="nav-dot"></i><span>Relatórios</span>
+      </a>
+    </nav>
+    <nav class="nav-group" data-role-admin>
+      <div class="nav-label">Administração</div>
+      <a class="nav-link" href="../../pages/admin/auditoria.html">
+        <i class="nav-dot"></i><span>Auditoria</span>
+      </a>
+      <a class="nav-link" href="../../pages/admin/configuracoes.html">
+        <i class="nav-dot"></i><span>Configurações</span>
+      </a>
+      <a class="nav-link" href="../../pages/admin/perfil.html">
+        <i class="nav-dot"></i><span>Perfil</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <header class="topbar">
+      <button class="btn mobile-menu" data-mobile-menu>Menu</button>
+      <label class="search">
+        Buscar proposta
+        <input placeholder="Número, cliente ou serviço..." data-search-propostas>
+      </label>
+      <div class="top-actions">
+        <a class="btn primary" href="nova-proposta.html">+ Nova proposta</a>
+      </div>
+    </header>
+
+    <section class="page">
+      <div class="page-header">
+        <div>
+          <div class="eyebrow">Documentos</div>
+          <h1>Propostas Comerciais</h1>
+          <p>Orçamentos, propostas de modernização, limpeza e suporte técnico para elevadores.</p>
+        </div>
+      </div>
+
+      <!-- FILTER BAR -->
+      <div class="glass filter-bar">
+        <div class="field">
+          <label>Filtrar por Status</label>
+          <select data-filter-status>
+            <option value="">Todos os status</option>
+            <option value="pendente">Pendente</option>
+            <option value="aprovada">Aprovada</option>
+            <option value="rejeitada">Rejeitada</option>
+            <option value="cancelada">Cancelada</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Filtrar por Cliente</label>
+          <select data-filter-cliente>
+            <option value="">Todos os clientes</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- PROPOSALS TABLE -->
+      <div class="glass table-card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Número</th>
+                <th>Cliente</th>
+                <th>Serviço / Escopo</th>
+                <th>Valor</th>
+                <th>Validade</th>
+                <th>Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody data-propostas-tbody>
+              <!-- Dinâmico -->
+              <tr>
+                <td colspan="7" style="text-align: center; color: var(--muted); padding: 32px;">
+                  Carregando propostas comerciais...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../js/config.js"></script>
+<script src="../../js/supabase-client.js"></script>
+<script src="../../js/app.js"></script>
+</body>
+</html>

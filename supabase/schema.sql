@@ -82,3 +82,30 @@ values
 ('cliente', 'Edifício Atlântico', 'CNPJ 12.345.678/0001-10', 'contato@edificio.com.br', '', '', null, 'Manutenção mensal', 'ativo'),
 ('fornecedor', 'Elev Parts Brasil', 'CNPJ 22.555.111/0001-80', 'financeiro@elevparts.com.br', '', '', null, 'Peças e sensores', 'pendente')
 on conflict do nothing;
+
+create table if not exists public.propostas (
+  id uuid primary key default gen_random_uuid(),
+  numero_proposta text,
+  cliente_id uuid references public.cadastros(id) on delete set null,
+  servico_descricao text not null,
+  valor numeric(12,2) not null,
+  data_validade date,
+  forma_pagamento text,
+  itens text,
+  observacoes text,
+  status text default 'pendente' check (status in ('pendente', 'aprovada', 'rejeitada', 'cancelada')),
+  created_at timestamptz not null default now()
+);
+
+alter table public.propostas enable row level security;
+
+do $$ begin
+  create policy "Equipe autenticada pode ler propostas" on public.propostas for select to authenticated using (true);
+exception when duplicate_object then null; end $$;
+do $$ begin
+  create policy "Equipe autenticada pode inserir propostas" on public.propostas for insert to authenticated with check (true);
+exception when duplicate_object then null; end $$;
+do $$ begin
+  create policy "Equipe autenticada pode atualizar propostas" on public.propostas for update to authenticated using (true) with check (true);
+exception when duplicate_object then null; end $$;
+

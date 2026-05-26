@@ -94,6 +94,41 @@
       const { data, error } = await client.from('recibos').insert(payload).select().single();
       if (error) throw error;
       return data;
+    },
+
+    async listPropostas() {
+      if (!client) return localRead('centership_propostas');
+      const { data, error } = await client.from('propostas').select('*').order('created_at', { ascending: false });
+      if (error) throw error;
+      return data || [];
+    },
+
+    async createProposta(payload) {
+      const record = { ...payload, id: payload.id || uid(), created_at: new Date().toISOString() };
+      if (!client) {
+        const rows = localRead('centership_propostas');
+        rows.unshift(record);
+        localWrite('centership_propostas', rows);
+        return record;
+      }
+      const { data, error } = await client.from('propostas').insert(payload).select().single();
+      if (error) throw error;
+      return data;
+    },
+
+    async updatePropostaStatus(id, status) {
+      if (!client) {
+        const rows = localRead('centership_propostas');
+        const row = rows.find(r => r.id === id);
+        if (row) {
+          row.status = status;
+          localWrite('centership_propostas', rows);
+        }
+        return row;
+      }
+      const { data, error } = await client.from('propostas').update({ status }).eq('id', id).select().single();
+      if (error) throw error;
+      return data;
     }
   };
 })();

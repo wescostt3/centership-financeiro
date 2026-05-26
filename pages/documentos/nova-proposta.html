@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nova Proposta Comercial | CenterShip Financeiro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="../../css/app.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    /* Estilos extras específicos para a Proposta Comercial no papel */
+    .proposal-paper {
+      background: rgba(255,255,255,0.97);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: var(--radius);
+      padding: clamp(20px, 4vw, 40px);
+      box-shadow: var(--shadow-card);
+      color: #111;
+      font-size: 13px;
+    }
+    .proposal-paper h1 { font-size: 22px; margin-top: 16px; color: #111; font-weight: 800; }
+    .proposal-paper h2 { font-size: 16px; color: #111; font-weight: 700; border-bottom: 1px solid #ddd; padding-bottom: 6px; margin-top: 20px; margin-bottom: 10px; }
+    .proposal-paper h1, .proposal-paper h2, .proposal-paper h3, .proposal-paper strong, .proposal-paper b { color: #111; }
+    .proposal-paper p { color: #333; line-height: 1.5; margin: 0 0 6px; }
+    .proposal-paper span { color: #222; }
+    .proposal-paper .eyebrow { color: #666; font-size: 10px; }
+    .proposal-paper .money { color: #111; font-family: var(--mono); }
+    .proposal-paper .panel { background: #f5f6f8; border: 1px solid #e2e4e8; color: #111; padding: 12px; margin-top: 12px; }
+    
+    /* Tabela interna do papel da proposta */
+    .proposal-items-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      margin-bottom: 16px;
+    }
+    .proposal-items-table th {
+      background: #f0f1f4;
+      color: #444;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+    .proposal-items-table td {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      color: #333;
+      font-size: 12px;
+    }
+    .proposal-items-table tr:nth-child(even) {
+      background: #fafbfe;
+    }
+
+    .proposal-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 2px solid #111;
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+    }
+    .proposal-head p { color: #555; font-size: 12px; margin: 0; }
+    .proposal-head img { width: 140px; }
+    
+    .signature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 36px; }
+    .signature { border-top: 1px solid #111; padding-top: 6px; text-align: center; color: #555; font-size: 12px; }
+
+    /* Estilos do formulário dinâmico de itens */
+    .dynamic-item-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1.2fr auto;
+      gap: 8px;
+      align-items: end;
+      margin-bottom: 8px;
+    }
+
+    @media print {
+      @page { size: A4; margin: 12mm 14mm; }
+      .sidebar, .topbar, .no-print { display: none !important; }
+      .app-shell { display: block; }
+      .split { display: block; }
+      body { background: white; color: #111; font-size: 12px; }
+      .page { padding: 0; }
+      .proposal-paper {
+        box-shadow: none; border: 0;
+        padding: 0; font-size: 12px;
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+      .proposal-paper h1 { font-size: 20px; margin-top: 12px; }
+      .proposal-paper h2 { font-size: 14px; margin-top: 16px; }
+      .proposal-paper p { font-size: 12px; line-height: 1.45; margin: 0 0 4px; }
+      .proposal-head { padding-bottom: 8px; margin-bottom: 12px; }
+      .proposal-head img { width: 120px; }
+      .proposal-items-table th { padding: 6px 10px; font-size: 10px; }
+      .proposal-items-table td { padding: 6px 10px; font-size: 11px; }
+      .signature-grid { margin-top: 24px; gap: 24px; }
+      .signature { font-size: 11px; padding-top: 4px; }
+      .proposal-paper .panel { padding: 8px; margin-top: 8px; }
+    }
+  </style>
+</head>
+<body>
+<div class="app-shell">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <a class="brand" href="../../dashboard.html">
+      <img class="brand-logo" src="../../public/images/brand/novo-logo.png" alt="CenterShip Elevadores" style="max-height: 48px; width: auto; display: block;">
+    </a>
+    <nav class="nav-group">
+      <div class="nav-label">Principal</div>
+      <a class="nav-link" href="../../dashboard.html">
+        <i class="nav-dot"></i><span>Dashboard</span>
+      </a>
+    </nav>
+    <nav class="nav-group">
+      <div class="nav-label" data-role-admin>Cadastros</div>
+      <a class="nav-link" href="../../pages/cadastros/clientes.html">
+        <i class="nav-dot"></i><span>Clientes</span>
+      </a>
+      <a class="nav-link" href="../../pages/cadastros/fornecedores.html">
+        <i class="nav-dot"></i><span>Fornecedores</span>
+      </a>
+      <a class="nav-link" href="../../pages/cadastros/colaboradores-mei.html">
+        <i class="nav-dot"></i><span>Colaboradores MEI</span>
+      </a>
+    </nav>
+    <nav class="nav-group">
+      <div class="nav-label">Financeiro</div>
+      <a class="nav-link" href="../../pages/financeiro/lancamentos.html">
+        <i class="nav-dot"></i><span>Lançamentos</span>
+      </a>
+      <a class="nav-link" href="../../pages/financeiro/contas.html">
+        <i class="nav-dot"></i><span>Contas</span>
+      </a>
+      <a class="nav-link" href="../../pages/financeiro/pagamentos-semanais.html">
+        <i class="nav-dot"></i><span>Pagamentos MEI</span>
+      </a>
+    </nav>
+    <nav class="nav-group">
+      <div class="nav-label">Documentos</div>
+      <a class="nav-link" href="../../pages/documentos/documentos.html">
+        <i class="nav-dot"></i><span>Comprovantes</span>
+      </a>
+      <a class="nav-link" href="../../pages/documentos/recibos.html">
+        <i class="nav-dot"></i><span>Recibos</span>
+      </a>
+      <a class="nav-link active" href="../../pages/documentos/propostas.html">
+        <i class="nav-dot"></i><span>Propostas Comerciais</span>
+      </a>
+      <a class="nav-link" href="../../pages/documentos/relatorios.html">
+        <i class="nav-dot"></i><span>Relatórios</span>
+      </a>
+    </nav>
+    <nav class="nav-group" data-role-admin>
+      <div class="nav-label">Administração</div>
+      <a class="nav-link" href="../../pages/admin/auditoria.html">
+        <i class="nav-dot"></i><span>Auditoria</span>
+      </a>
+      <a class="nav-link" href="../../pages/admin/configuracoes.html">
+        <i class="nav-dot"></i><span>Configurações</span>
+      </a>
+      <a class="nav-link" href="../../pages/admin/perfil.html">
+        <i class="nav-dot"></i><span>Perfil</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <header class="topbar">
+      <button class="btn mobile-menu" data-mobile-menu>Menu</button>
+      <div style="flex: 1;"></div>
+      <div class="top-actions no-print">
+        <button class="btn" data-action="print">Imprimir proposta</button>
+        <button class="btn primary" data-action="toast" data-message="Use a opção de Imprimir e salve como PDF.">Baixar PDF</button>
+      </div>
+    </header>
+
+    <section class="page">
+      <div class="page-header no-print">
+        <div>
+          <div class="eyebrow">Novo Orçamento</div>
+          <h1>Gerador de Propostas</h1>
+          <p>Criação de propostas comerciais de elevadores com visual técnico e detalhamento de escopo.</p>
+        </div>
+        <div class="top-actions">
+          <a class="btn" href="propostas.html">← Voltar à lista</a>
+        </div>
+      </div>
+
+      <div class="split">
+        <!-- FORMULÁRIO -->
+        <form class="panel no-print" data-proposal-form style="background: var(--glass); border: 1px solid var(--glass-border); border-radius: var(--radius)">
+          <h2>Dados da Proposta</h2>
+          
+          <div class="grid cols-2" style="margin-top:16px; gap: 14px;">
+            <div class="field">
+              <label>Número da Proposta</label>
+              <input name="proposalNumber" value="PROP-2026-001" required>
+            </div>
+            <div class="field">
+              <label>Data de Validade</label>
+              <input name="validityDate" type="date" value="2026-06-26" required>
+            </div>
+            <div class="field span-2">
+              <label>Selecionar Cliente</label>
+              <select name="clientId" data-client-select required>
+                <option value="">Selecione um cliente...</option>
+              </select>
+            </div>
+            <div class="field span-2">
+              <label>Descrição Principal do Serviço</label>
+              <input name="serviceDesc" value="Serviço técnico de modernização e ajuste de segurança de elevadores" required>
+            </div>
+            
+            <div class="field">
+              <label>Forma de Pagamento</label>
+              <input name="paymentTerms" value="Faturamento 30 dias via Boleto bancário" required>
+            </div>
+            
+            <div class="field">
+              <label>Prazo de Execução</label>
+              <input name="executionTime" value="5 dias úteis" required>
+            </div>
+          </div>
+
+          <h2 style="margin-top:20px; font-size:16px">Itens da Proposta</h2>
+          
+          <div id="dynamic-items-container" style="margin-top:12px">
+            <!-- Linhas dinâmicas -->
+            <div class="dynamic-item-row" data-item-index="0">
+              <div class="field">
+                <label style="font-size: 10px">Descrição do Item</label>
+                <input name="item_desc_0" value="Kit sensores e limitador de velocidade" required>
+              </div>
+              <div class="field">
+                <label style="font-size: 10px">Quant.</label>
+                <input name="item_qty_0" type="number" value="2" min="1" required style="padding-inline: 8px">
+              </div>
+              <div class="field">
+                <label style="font-size: 10px">Val. Unitário (R$)</label>
+                <input name="item_price_0" type="number" value="1250" min="0" step="0.01" required>
+              </div>
+              <button class="btn danger small" type="button" onclick="removeProposalRow(this)" style="min-height:42px; border-radius:8px">🗑</button>
+            </div>
+            
+            <div class="dynamic-item-row" data-item-index="1">
+              <div class="field">
+                <input name="item_desc_1" value="Mão de obra técnica de engenharia e alpinismo" required>
+              </div>
+              <div class="field">
+                <input name="item_qty_1" type="number" value="1" min="1" required style="padding-inline: 8px">
+              </div>
+              <div class="field">
+                <input name="item_price_1" type="number" value="1400" min="0" step="0.01" required>
+              </div>
+              <button class="btn danger small" type="button" onclick="removeProposalRow(this)" style="min-height:42px; border-radius:8px">🗑</button>
+            </div>
+          </div>
+
+          <button class="btn" type="button" onclick="addProposalRow()" style="margin-top:8px; border-radius:8px; font-size:12px">+ Adicionar item</button>
+
+          <div class="field span-2" style="margin-top:14px">
+            <label>Observações / Condições Gerais</label>
+            <textarea name="observations" rows="3">Proposta sujeita a reavaliação caso as condições de fixação estrutural divirjam do relatório preliminar de engenharia. Garantia técnica de 12 meses sobre peças instaladas.</textarea>
+          </div>
+
+          <div class="top-actions" style="justify-content:flex-start; margin-top:20px">
+            <button type="button" class="btn primary" data-action="update-preview">Atualizar prévia</button>
+            <button type="button" class="btn" data-action="save-proposal">Salvar Proposta</button>
+          </div>
+        </form>
+
+        <!-- PRÉVIA TIMBRADA (PAPEL) -->
+        <article class="proposal-paper" id="proposal-doc">
+          <div class="proposal-head">
+            <div style="display:flex; gap:12px; align-items:center">
+              <img src="../../public/images/brand/novo-logo.png" alt="CenterShip" onerror="this.style.display='none';document.getElementById('brand-mark-fallback').style.display='grid'">
+              <div class="logo-mark" id="brand-mark-fallback" style="display:none; width:44px; height:44px; font-size:16px">CS</div>
+              <div>
+                <h2 style="margin:0; border:0; padding:0" data-prop="companyName">CenterShip Elevadores</h2>
+                <p>
+                  <span>CNPJ </span><span data-prop="companyCnpj">00.000.000/0001-00</span><br>
+                  <span>Rio de Janeiro, RJ</span> · <span>comercial@centership.com.br</span>
+                </p>
+              </div>
+            </div>
+            <div style="text-align: right">
+              <div class="eyebrow" data-prop="proposalNumber" style="font-size: 12px; font-weight:700">PROP-2026-001</div>
+              <strong data-prop="currentDate" style="display:block; font-size:12px">26/05/2026</strong>
+              <span style="font-size:11px; color:#555">Validade: <strong data-prop="validityDate">26/06/2026</strong></span>
+            </div>
+          </div>
+
+          <h1 style="font-size:22px; text-transform: uppercase; letter-spacing: -0.01em; margin-bottom: 12px; border-bottom: 2px solid #111; padding-bottom: 6px">Proposta Comercial e Orçamento Técnico</h1>
+          
+          <h2>1. Identificação do Cliente</h2>
+          <p>
+            <b>Razão Social / Condomínio:</b> <span data-prop="clientName">Edifício Atlântico</span><br>
+            <b>Documento / CNPJ:</b> <span data-prop="clientDoc">CNPJ 12.345.678/0001-10</span><br>
+            <b>E-mail:</b> <span data-prop="clientEmail">contato@edificio.com.br</span> · <b>Telefone:</b> <span data-prop="clientPhone">-</span>
+          </p>
+
+          <h2>2. Escopo dos Serviços</h2>
+          <p data-prop="serviceDesc" style="font-size:13px; font-weight: 500">Serviço técnico de modernização e ajuste de segurança de elevadores</p>
+
+          <h2>3. Detalhamento Comercial</h2>
+          <table class="proposal-items-table">
+            <thead>
+              <tr>
+                <th>Descrição do Item</th>
+                <th style="width: 80px; text-align: center">Qtd</th>
+                <th style="width: 130px; text-align: right">Val. Unitário</th>
+                <th style="width: 130px; text-align: right">Subtotal</th>
+              </tr>
+            </thead>
+            <tbody data-prop-items-tbody>
+              <!-- Dinâmico -->
+            </tbody>
+          </table>
+
+          <div class="panel" style="margin-top: 10px; padding: 12px">
+            <div style="display:flex; justify-content: space-between; align-items: center">
+              <span style="font-weight:700; text-transform:uppercase; font-size:12px; color:#333">Valor Total da Proposta:</span>
+              <strong class="money" data-prop="totalValue" style="font-size:18px; color:#111">R$ 3.900,00</strong>
+            </div>
+          </div>
+
+          <h2>4. Condições Comerciais</h2>
+          <p>
+            <b>Forma de Pagamento:</b> <span data-prop="paymentTerms">Faturamento 30 dias via Boleto bancário</span><br>
+            <b>Prazo de Execução:</b> <span data-prop="executionTime">5 dias úteis</span>
+          </p>
+
+          <h2>5. Condições Gerais e Observações</h2>
+          <p style="font-size:11.5px; color:#555; text-align: justify" data-prop="observations">Proposta sujeita a reavaliação caso as condições de fixação estrutural divirjam do relatório preliminar de engenharia. Garantia técnica de 12 meses sobre peças instaladas.</p>
+
+          <div class="signature-grid">
+            <div class="signature">
+              <strong>CenterShip Elevadores</strong><br>
+              Departamento Comercial
+            </div>
+            <div class="signature">
+              <strong data-prop="clientName">Edifício Atlântico</strong><br>
+              De acordo e autorização de serviço
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../js/config.js"></script>
+<script src="../../js/supabase-client.js"></script>
+<script src="../../js/app.js"></script>
+<script>
+  let rowCount = 2;
+  
+  function addProposalRow() {
+    const container = document.getElementById('dynamic-items-container');
+    const newRow = document.createElement('div');
+    newRow.className = 'dynamic-item-row';
+    newRow.setAttribute('data-item-index', rowCount);
+    newRow.innerHTML = `
+      <div class="field">
+        <input name="item_desc_${rowCount}" placeholder="Descrição do item" required>
+      </div>
+      <div class="field">
+        <input name="item_qty_${rowCount}" type="number" value="1" min="1" required style="padding-inline: 8px">
+      </div>
+      <div class="field">
+        <input name="item_price_${rowCount}" type="number" value="0" min="0" step="0.01" required>
+      </div>
+      <button class="btn danger small" type="button" onclick="removeProposalRow(this)" style="min-height:42px; border-radius:8px">🗑</button>
+    `;
+    container.appendChild(newRow);
+    rowCount++;
+    updatePreviewUI();
+  }
+
+  function removeProposalRow(button) {
+    const rows = document.querySelectorAll('.dynamic-item-row');
+    if (rows.length <= 1) {
+      alert("A proposta precisa conter pelo menos 1 item.");
+      return;
+    }
+    button.parentElement.remove();
+    updatePreviewUI();
+  }
+</script>
+</body>
+</html>
